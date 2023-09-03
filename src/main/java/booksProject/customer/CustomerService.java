@@ -11,5 +11,5 @@ public interface CustomerService {
 
     CustomerDto update(String uuid, CustomerDto customerDto);
 
-    void delete(String uuid);
+    Boolean delete(String uuid);
 }

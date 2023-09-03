@@ -1,23 +1,22 @@
 package booksProject.customer;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "customer")
 public class CustomerEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String uuid;
     private String name;
     private String surname;
     private int age;
     private String sex;
-    private String emailAdress;
+    @Column(name = "email_address")
+    private String emailAddress;
 
     public String getUuid() {
         return uuid;
@@ -64,12 +63,12 @@ public class CustomerEntity {
         return this;
     }
 
-    public String getEmailAdress() {
-        return emailAdress;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public CustomerEntity setEmailAdress(String emailAdress) {
-        this.emailAdress = emailAdress;
+    public CustomerEntity setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
         return this;
     }
 }

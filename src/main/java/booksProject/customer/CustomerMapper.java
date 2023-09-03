@@ -15,13 +15,13 @@ public class CustomerMapper {
                 .setName(customer.getName())
                 .setSurname(customer.getSurname())
                 .setAge(customer.getAge())
-                .setEmailAdress(customer.getEmailAdress())
+                .setEmailAdress(customer.getEmailAddress())
                 .setSex(customer.getSex());
     }
 
     public List<CustomerDto> map(List<CustomerEntity> customerList){
        return customerList.stream()
-                .map(customerEntity -> mapToDto(customerEntity))
+                .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
 
@@ -31,7 +31,7 @@ public class CustomerMapper {
                 .setName(customerDto.getName())
                 .setSurname(customerDto.getSurname())
                 .setAge(customerDto.getAge())
-                .setEmailAdress(customerDto.getEmailAdress())
+                .setEmailAddress(customerDto.getEmailAdress())
                 .setSex(customerDto.getSex());
     }
 
