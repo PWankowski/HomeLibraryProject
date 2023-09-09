@@ -7,9 +7,9 @@ public interface CustomerService {
     CustomerDto getCustomer(String uuid);
     List<CustomerDto> getAllCustomers();
 
-    CustomerEntity create(CustomerDto customerDto);
+    CustomerDto create(CustomerForm customerForm);
 
-    CustomerDto update(String uuid, CustomerDto customerDto);
+    CustomerDto update(String uuid, CustomerForm customerForm);
 
-    Boolean delete(String uuid);
+    void delete(String uuid);
 }

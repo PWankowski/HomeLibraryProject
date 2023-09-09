@@ -7,7 +7,7 @@ public class CustomerDto {
     private String surname;
     private int age;
     private String sex;
-    private String emailAdress;
+    private String emailAddress;
 
     public String getUuid() {
         return uuid;
@@ -54,12 +54,12 @@ public class CustomerDto {
         return this;
     }
 
-    public String getEmailAdress() {
-        return emailAdress;
+    public String getEmailAddress() {
+        return emailAddress;
     }
 
-    public CustomerDto setEmailAdress(String emailAdress) {
-        this.emailAdress = emailAdress;
+    public CustomerDto setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
         return this;
     }
 }
