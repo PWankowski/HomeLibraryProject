@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 @Component
 public class CustomerMapper {
 
-    public CustomerDto mapToDto(CustomerEntity customer) {
+    public static CustomerDto mapToDto(CustomerEntity customer) {
 
         return new CustomerDto()
                 .setUuid(customer.getUuid())
@@ -20,7 +20,7 @@ public class CustomerMapper {
                 .setSex(customer.getSex());
     }
 
-    public CustomerDto mapToDto(CustomerForm form) {
+    public static CustomerDto mapToDto(CustomerForm form) {
 
         return new CustomerDto()
                 .setUuid(UUID.randomUUID().toString())
@@ -31,14 +31,14 @@ public class CustomerMapper {
                 .setSex(form.getSex());
     }
 
-    public List<CustomerDto> map(List<CustomerEntity> customerList) {
+    public static List<CustomerDto> map(List<CustomerEntity> customerList) {
 
        return customerList.stream()
-                .map(this::mapToDto)
+                .map(customer -> mapToDto(customer))
                 .collect(Collectors.toList());
     }
 
-    public CustomerEntity mapToEntity(CustomerDto customerDto) {
+    public static CustomerEntity mapToEntity(CustomerDto customerDto) {
 
         return new CustomerEntity()
                 .setUuid(UUID.randomUUID().toString())

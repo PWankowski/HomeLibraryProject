@@ -11,32 +11,30 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
-    private final CustomerMapper customerMapper;
 
     public CustomerServiceImpl(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
-        this.customerMapper = customerMapper;
     }
 
     @Transactional(readOnly = true)
     @Override
     public CustomerDto getCustomer(String uuid) throws NoCustomerFoundException{
 
-        return customerMapper.mapToDto(customerRepository.findByUuid(uuid).orElseThrow(() -> new NoCustomerFoundException(uuid)));
+        return CustomerMapper.mapToDto(customerRepository.findByUuid(uuid).orElseThrow(() -> new NoCustomerFoundException(uuid)));
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<CustomerDto> getAllCustomers() {
 
-        return customerMapper.map(customerRepository.findAll());
+        return CustomerMapper.map(customerRepository.findAll());
     }
 
     @Override
     public CustomerDto create(CustomerForm customerForm) {
 
-        CustomerDto customerDto = customerMapper.mapToDto(customerForm);
-        CustomerEntity customerEntity = customerMapper.mapToEntity(customerDto);
+        CustomerDto customerDto = CustomerMapper.mapToDto(customerForm);
+        CustomerEntity customerEntity = CustomerMapper.mapToEntity(customerDto);
         customerRepository.save(customerEntity);
         return  customerDto;
     }
@@ -53,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .setEmailAddress(customerForm.getEmailAddress());
 
         customerRepository.save(result);
-        return customerMapper.mapToDto(result);
+        return CustomerMapper.mapToDto(result);
     }
     @Transactional
     @Override
