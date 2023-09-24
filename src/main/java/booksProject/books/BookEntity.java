@@ -73,7 +73,13 @@ public class BookEntity {
         return tags;
     }
 
-    public void addBookTag(){
+    public void addBookTag(BookTagEntity bookTag){
+        this.tags.add(bookTag);
+        bookTag.getBooks().add(this);
+    }
 
+    public void removeBookTag(BookTagEntity bookTag){
+        this.tags.remove(bookTag);
+        bookTag.getBooks().remove(this);
     }
 }

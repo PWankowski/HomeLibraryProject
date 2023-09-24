@@ -30,7 +30,8 @@ public class BookTagEntity {
         return books;
     }
 
-    public void addBook(BookEntity book){
-        books.add(book);
+    public BookTagEntity setBooks(Set<BookEntity> books) {
+        this.books = books;
+        return this;
     }
 }

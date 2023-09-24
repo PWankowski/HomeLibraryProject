@@ -12,4 +12,15 @@ public class BookDetailsMapper {
                 .setPublisher(bookDetails.getPublisher())
                 .setLang(bookDetails.getLang());
     }
+
+    public static BookDetailsEntity map(BookFormDetails bookFormDetails){
+
+        if(bookFormDetails == null) {
+            return new BookDetailsEntity();
+        }
+        return new BookDetailsEntity()
+                .setIsbn(bookFormDetails.getIsbn())
+                .setPublisher(bookFormDetails.getPublisher())
+                .setLang(bookFormDetails.getLang());
+    }
 }
