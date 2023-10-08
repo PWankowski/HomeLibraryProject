@@ -1,10 +1,11 @@
 package booksProject.books;
 
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class BookMapper {
+
     public static BookDto map(BookEntity entity) {
+        BookTagMapper bookTagMapper = new BookTagMapper();
         return new BookDto()
                 .setUuid(entity.getUuid())
                 .setAuthor(entity.getAuthor())
@@ -13,11 +14,13 @@ public class BookMapper {
                         BookDetailsMapper.map(entity.getDetails())
                 )
                 .setTags(
-                        BookTagMapper.maptoString(entity.getTags())
+                        bookTagMapper.mapToString(entity.getTags())
                 );
     }
 
     public static BookEntity map(BookForm formEntity) {
+        BookTagMapper bookTagMapper = new BookTagMapper();
+
         BookEntity bookEntity = new BookEntity()
                 .setUuid(UUID.randomUUID().toString())
                 .setAuthor(formEntity.getAuthor())
@@ -25,9 +28,6 @@ public class BookMapper {
                 .setDetails(
                         BookDetailsMapper.map(formEntity.getDetails())
                 );
-        BookTagMapper.mapToEntity(formEntity.getTags())
-                     .forEach(bookEntity::addBookTag);
-
         return bookEntity;
     }
 }

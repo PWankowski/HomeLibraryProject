@@ -4,13 +4,14 @@ import java.util.List;
 
 public interface BookService {
 
-    public List<BookEntity> findAll(String author);
+    List<BookDto> findAll();
+    List<BookDto> findAllByAuthor(String author);
 
-    public BookEntity findByUuid(String uuid);
+    BookDto findByUuid(String uuid);
 
-    public BookEntity create(BookForm form);
+    BookDto create(BookForm form);
 
-    public void delete(String uuid);
+    void delete(String uuid);
 
-    public BookDto update(String uuid, BookForm form);
+    BookDto update(String uuid, BookForm form);
 }

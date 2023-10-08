@@ -3,6 +3,7 @@ package booksProject.books;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -14,7 +15,7 @@ public class BookTagEntity {
     private long id;
     private String tagValue;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "tags")
     private Set<BookEntity> books;
 
     public String getTagValue() {
@@ -27,6 +28,9 @@ public class BookTagEntity {
     }
 
     public Set<BookEntity> getBooks() {
+        if (books == null) {
+            books = new HashSet<>();
+        }
         return books;
     }
 

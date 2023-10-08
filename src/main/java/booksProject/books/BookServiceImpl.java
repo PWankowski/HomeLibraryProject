@@ -2,6 +2,7 @@ package booksProject.books;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,38 +12,79 @@ import java.util.stream.Collectors;
 @Service
 public class BookServiceImpl implements BookService{
 
-    @Autowired
-    private BooksRepository bookRepository;
 
-    public List<BookEntity> findAll() {
-        return bookRepository.findAll();
+    private final BooksRepository bookRepository;
+    private final BookTagRepository bookTagRepository;
+
+    @Autowired
+    public BookServiceImpl(BooksRepository bookRepository, BookTagRepository bookTagRepository) {
+        this.bookRepository = bookRepository;
+        this.bookTagRepository = bookTagRepository;
+    }
+
+    @Override
+    public List<BookDto> findAll() {
+        List<BookEntity> books = bookRepository.findAll();
+        return books.stream()
+                    .map(bookEntity -> BookMapper.map(bookEntity))
+                    .collect(Collectors.toList());
     }
     @Override
-    public List<BookEntity> findAll(String author) {
+    @Transactional(readOnly = true)
+    public List<BookDto> findAllByAuthor(String author) {
 
         if(author != null) {
             List<BookEntity> result =  bookRepository.findAllByAuthor(author).get();
             if(!result.isEmpty()){
-               return result;
+               return result.stream()
+                       .map(bookEntity -> BookMapper.map(bookEntity))
+                       .collect(Collectors.toList());
             }
-            return bookRepository.findAll();
+            return bookRepository.findAll().stream()
+                    .map(bookEntity -> BookMapper.map(bookEntity))
+                    .collect(Collectors.toList());
         }
-        return bookRepository.findAll();
+        return bookRepository.findAll().stream()
+                .map(bookEntity -> BookMapper.map(bookEntity))
+                .collect(Collectors.toList());
     }
     @Override
-    public BookEntity findByUuid(String uuid) {
+    public BookDto findByUuid(String uuid) {
 
-        return bookRepository.findByUuid(uuid).orElse(null);
+        BookEntity book = bookRepository.findByUuid(uuid).orElse(null);
+        if(book != null){
+           return BookMapper.map(book);
+        }
+        return new BookDto();
     }
     @Override
-    public BookEntity create(BookForm form) {
-        return bookRepository.saveAndFlush(BookMapper.map(form));
+    public BookDto create(BookForm form) {
+        BookEntity book = BookMapper.map(form);
+        Set<String> bookTagsString = form.getTags();
+
+        if(bookTagsString == null || bookTagsString.size() == 0) {
+           return BookMapper.map(bookRepository.save(book));
+        }
+        Set<BookTagEntity> bookTags = mapStringToTagEntity(bookTagsString);
+        for(BookTagEntity tag : bookTags) {
+            book.addBookTag(tag);
+        }
+
+        return BookMapper.map(bookRepository.save(book));
     }
     @Override
+    @Transactional
     public void delete(String uuid) {
 
-        bookRepository.findByUuid(uuid)
-                .ifPresent(book -> bookRepository.delete(book));
+        Optional<BookEntity> result = bookRepository.findByUuid(uuid);
+        if(result.isPresent()){
+          BookEntity book =  result.get();
+          List<BookTagEntity> tags =  book.getTags().stream().collect(Collectors.toList());
+          for(int i=0; i<tags.size(); i++) {
+              book.removeBookTag(tags.get(i));
+          }
+          bookRepository.delete(book);
+        }
     }
 
     @Override
@@ -62,20 +104,38 @@ public class BookServiceImpl implements BookService{
         return new BookDto();
     }
 
-
     private void updateTags(Set<String> tagsForm, BookEntity book){
+        BookTagMapper BookTagMapper = new BookTagMapper();
         List<BookTagEntity> bookTagsFiltered = book.getTags().stream()
                 .filter(tag -> !tagsForm.contains(tag.getTagValue()))
                 .collect(Collectors.toList());
 
-        bookTagsFiltered.stream()
-                .forEach(tagValue -> book.removeBookTag(tagValue));
+        for(int i=0; i<bookTagsFiltered.size(); i++) {
+            book.removeBookTag(bookTagsFiltered.get(i));
+        }
 
         Set<String> formTagsFiltered = tagsForm.stream()
                 .filter(tagForm -> !book.getTags().contains(tagForm))
                 .collect(Collectors.toSet());
+        Set<BookTagEntity> bookTags = mapStringToTagEntity(formTagsFiltered);
+        for(BookTagEntity tag : bookTags) {
+            book.addBookTag(tag);
+        }
 
-        BookTagMapper.mapToEntity(formTagsFiltered).stream()
-                .forEach(bookTag ->  book.addBookTag(bookTag));
     }
+
+    private Set<BookTagEntity> mapStringToTagEntity(Set<String> bookTagsValues) {
+
+        return bookTagsValues.stream()
+                .map(tag -> {
+                    Optional<BookTagEntity> bookTag = bookTagRepository.findByTagValue(tag);
+                    if(bookTag.isPresent()) {
+                        return bookTag.get();
+                    }
+                    return new BookTagEntity().setTagValue(tag);
+                })
+                .collect(Collectors.toSet());
+    }
+
+
 }

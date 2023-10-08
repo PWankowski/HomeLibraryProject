@@ -2,6 +2,7 @@ package booksProject.books;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,6 +11,7 @@ public class BookEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     private long id;
     private String uuid;
 
@@ -21,17 +23,8 @@ public class BookEntity {
     @JoinColumn(name = "details_id", referencedColumnName = "id")
     private BookDetailsEntity details;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Set<BookTagEntity> tags;
-
-    public long getId() {
-        return id;
-    }
-
-    public BookEntity setId(long id) {
-        this.id = id;
-        return this;
-    }
 
     public String getUuid() {
         return uuid;
@@ -74,6 +67,9 @@ public class BookEntity {
     }
 
     public void addBookTag(BookTagEntity bookTag){
+        if (tags == null) {
+            tags = new HashSet<>();
+        }
         this.tags.add(bookTag);
         bookTag.getBooks().add(this);
     }

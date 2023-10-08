@@ -13,15 +13,6 @@ public class BookDetailsEntity {
     private String lang;
     private String publisher;
 
-    public Long getId() {
-        return id;
-    }
-
-    public BookDetailsEntity setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
     public String getIsbn() {
         return isbn;
     }
