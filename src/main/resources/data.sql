@@ -22,14 +22,14 @@ INSERT INTO book_tag(id, tag_Value) VALUES
    (100080, 'adipiscing')
 ;
 
-INSERT INTO books (id, uuid, title, author, details_id) VALUES
+INSERT INTO book (id, uuid, title, author, details_id) VALUES
     (100100, '19f83664-e6fe-46d0-a79f-b240e6a319c7', 'The Lord Of The Rings', 'J.R.R. Tolkien', 100001),
     (100200, '2fe15345-8154-4322-b3d0-62c667b6382a', '1984', 'George Orwell', 100002),
     (100300, '2fe15345-8154-4322-b3d0-62c667b6112c', '2020', 'George Orwell', 100003),
     (100400, '3ec642a5-016f-46b1-a1bd-ac0f12bddc8a', 'The Hitchhikers Guide To The Galaxy', 'Douglas Adams', 100004)
 ;
 
-INSERT INTO books_tags(books_id, tags_id) VALUES
+INSERT INTO books_tags(book_id, tag_id) VALUES
     (100100,100020),
     (100100,100010),
     (100100,100060),

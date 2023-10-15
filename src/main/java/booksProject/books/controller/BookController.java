@@ -1,5 +1,8 @@
-package booksProject.books;
+package booksProject.books.controller;
 
+import booksProject.books.dto.BookDto;
+import booksProject.books.dto.BookForm;
+import booksProject.books.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

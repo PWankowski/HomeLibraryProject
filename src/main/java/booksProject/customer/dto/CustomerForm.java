@@ -1,4 +1,4 @@
-package booksProject.customer;
+package booksProject.customer.dto;
 
 public class CustomerForm {
     private String name;

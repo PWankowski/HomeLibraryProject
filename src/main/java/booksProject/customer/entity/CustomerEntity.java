@@ -1,4 +1,4 @@
-package booksProject.customer;
+package booksProject.customer.entity;
 
 
 import jakarta.persistence.*;

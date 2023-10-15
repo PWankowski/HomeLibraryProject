@@ -1,4 +1,7 @@
-package booksProject.customer;
+package booksProject.customer.service;
+
+import booksProject.customer.dto.CustomerDto;
+import booksProject.customer.dto.CustomerForm;
 
 import java.util.List;
 

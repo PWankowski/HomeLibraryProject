@@ -1,12 +1,17 @@
-package booksProject.customer;
+package booksProject.customer.service;
 
 
+import booksProject.customer.*;
+import booksProject.customer.dto.CustomerDto;
+import booksProject.customer.dto.CustomerForm;
+import booksProject.customer.entity.CustomerEntity;
+import booksProject.customer.mappers.CustomerMapper;
+import booksProject.customer.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -20,7 +25,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(readOnly = true)
     @Override
-    public CustomerDto getCustomer(String uuid) throws NoCustomerFoundException{
+    public CustomerDto getCustomer(String uuid) throws NoCustomerFoundException {
 
         return CustomerMapper.mapToDto(customerRepository.findByUuid(uuid).orElseThrow(() -> new NoCustomerFoundException(uuid)));
     }

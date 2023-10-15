@@ -1,5 +1,6 @@
-package booksProject.books;
+package booksProject.books.repository;
 
+import booksProject.books.entity.BookTagEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

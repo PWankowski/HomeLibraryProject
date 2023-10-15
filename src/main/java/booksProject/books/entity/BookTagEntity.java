@@ -1,7 +1,9 @@
-package booksProject.books;
+package booksProject.books.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -13,29 +15,17 @@ public class BookTagEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Getter
+    @Setter
     private String tagValue;
 
     @ManyToMany(mappedBy = "tags")
     private Set<BookEntity> books;
-
-    public String getTagValue() {
-        return tagValue;
-    }
-
-    public BookTagEntity setTagValue(String tagValue) {
-        this.tagValue = tagValue;
-        return this;
-    }
 
     public Set<BookEntity> getBooks() {
         if (books == null) {
             books = new HashSet<>();
         }
         return books;
-    }
-
-    public BookTagEntity setBooks(Set<BookEntity> books) {
-        this.books = books;
-        return this;
     }
 }

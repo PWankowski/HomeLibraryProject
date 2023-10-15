@@ -1,5 +1,8 @@
-package booksProject.customer;
+package booksProject.customer.mappers;
 
+import booksProject.customer.dto.CustomerDto;
+import booksProject.customer.dto.CustomerForm;
+import booksProject.customer.entity.CustomerEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
