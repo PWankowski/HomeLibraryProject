@@ -20,4 +20,8 @@ public class BookDetailsEntity {
     @Getter
     @Setter
     private String publisher;
+
+    @Getter
+    @Setter
+    private String description;
 }

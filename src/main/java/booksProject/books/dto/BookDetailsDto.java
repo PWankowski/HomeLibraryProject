@@ -12,4 +12,6 @@ public class BookDetailsDto {
     private String isbn;
     private String lang;
     private String publisher;
+
+    private String description;
 }

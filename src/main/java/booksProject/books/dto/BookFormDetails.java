@@ -13,5 +13,7 @@ public class BookFormDetails {
     private String lang;
     private String publisher;
 
+    private String description;
+
 
 }

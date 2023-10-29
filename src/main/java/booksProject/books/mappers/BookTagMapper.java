@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class BookTagMapper {
 
-    public Set<String> mapToString(Set<BookTagEntity> bookTags){
+    public Set<String> mapToString(Set<BookTagEntity> bookTags) {
 
         if(bookTags == null || bookTags.size() == 0) {
             return Set.of();
