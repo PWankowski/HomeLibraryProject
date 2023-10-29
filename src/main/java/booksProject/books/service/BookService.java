@@ -14,7 +14,7 @@ public interface BookService {
 
     BookDto create(BookForm form);
 
-    void delete(String uuid);
+    boolean delete(String uuid);
 
     BookDto update(String uuid, BookForm form);
 }

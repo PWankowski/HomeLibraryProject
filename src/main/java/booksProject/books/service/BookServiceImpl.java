@@ -1,18 +1,17 @@
 package booksProject.books.service;
 
+import booksProject.books.NoBookFoundException;
 import booksProject.books.dto.BookDto;
 import booksProject.books.dto.BookForm;
 import booksProject.books.entity.BookEntity;
 import booksProject.books.entity.BookTagEntity;
 import booksProject.books.mappers.BookDetailsMapper;
 import booksProject.books.mappers.BookMapper;
-import booksProject.books.mappers.BookTagMapper;
 import booksProject.books.repository.BookTagRepository;
 import booksProject.books.repository.BooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -58,13 +57,13 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toList());
     }
     @Override
-    public BookDto findByUuid(String uuid) {
+    public BookDto findByUuid(String uuid) throws NoBookFoundException{
 
         BookEntity book = bookRepository.findByUuid(uuid).orElse(null);
         if(book != null){
            return BookMapper.map(book);
         }
-        return new BookDto();
+        throw new NoBookFoundException(uuid);
     }
     @Override
     public BookDto create(BookForm form) {
@@ -83,7 +82,7 @@ public class BookServiceImpl implements BookService {
     }
     @Override
     @Transactional
-    public void delete(String uuid) {
+    public boolean delete(String uuid) throws NoBookFoundException{
 
         Optional<BookEntity> result = bookRepository.findByUuid(uuid);
         if(result.isPresent()){
@@ -93,7 +92,9 @@ public class BookServiceImpl implements BookService {
               book.removeBookTag(tags.get(i));
           }
           bookRepository.delete(book);
+          return true;
         }
+        throw new NoBookFoundException(uuid);
     }
 
     @Override
@@ -113,7 +114,7 @@ public class BookServiceImpl implements BookService {
         return new BookDto();
     }
 
-    private void updateTags(Set<String> tagsForm, BookEntity book){
+    private void updateTags(Set<String> tagsForm, BookEntity book) {
         List<BookTagEntity> bookTagsFiltered = book.getTags().stream()
                 .filter(tag -> !tagsForm.contains(tag.getTagValue()))
                 .collect(Collectors.toList());

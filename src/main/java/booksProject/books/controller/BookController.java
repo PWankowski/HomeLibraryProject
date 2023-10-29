@@ -1,12 +1,12 @@
 package booksProject.books.controller;
 
-import booksProject.books.dto.BookDto;
+import booksProject.books.NoBookFoundException;
 import booksProject.books.dto.BookForm;
 import booksProject.books.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/books/")
@@ -19,32 +19,44 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping(value = "getAllByAuthor")
-    public List<BookDto> getAllBooksByAuthor(@RequestParam String author){
-       return bookService.findAllByAuthor(author);
+    @GetMapping("getAllByAuthor")
+    public ResponseEntity getAllBooksByAuthor(@RequestParam String author) {
+
+       return ResponseEntity.ok(bookService.findAllByAuthor(author));
     }
     @GetMapping("getAll")
-    public List<BookDto> getAll(){
-       return bookService.findAll();
+    public ResponseEntity getAll() {
+
+       return ResponseEntity.ok(bookService.findAll());
     }
 
     @GetMapping("getByUUID/{uuid}")
-    public BookDto getBookByUUID(@PathVariable String uuid){
-       return bookService.findByUuid(uuid);
+    public ResponseEntity getBookByUUID(@PathVariable String uuid) {
+
+       return ResponseEntity.ok(bookService.findByUuid(uuid));
     }
 
     @PostMapping("createBook")
-    public BookDto createBook(@RequestBody BookForm formBook){
-      return  bookService.create(formBook);
+    public ResponseEntity createBook(@RequestBody BookForm formBook) {
+
+      return  ResponseEntity.ok(bookService.create(formBook));
     }
 
     @DeleteMapping("deleteByUUID/{uuid}")
-    public void deleteBook(@PathVariable String uuid){
-       bookService.delete(uuid);
+    public ResponseEntity deleteBook(@PathVariable String uuid) {
+
+      return   ResponseEntity.ok(bookService.delete(uuid));
     }
 
     @PutMapping("updateByUUID/{uuid}")
-    public BookDto updateBook(@PathVariable String uuid,@RequestBody BookForm form){
-       return  bookService.update(uuid,form);
+    public ResponseEntity updateBook(@PathVariable String uuid, @RequestBody BookForm form) {
+
+       return  ResponseEntity.ok(bookService.update(uuid,form));
+    }
+
+    @ExceptionHandler(value = NoBookFoundException.class)
+    public ResponseEntity handleNoBookFoundException(NoBookFoundException exception) {
+
+        return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

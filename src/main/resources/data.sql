@@ -5,11 +5,11 @@ INSERT INTO customer( uuid, name, surname, age, sex, email_address) VALUES
    ( 'bfa25bde-2fbc-11ee-be56-0242ac120004', 'Katarzyna', 'Wrzęsicka', 18, 'F', 'brząszcz@gmail.com')
 ;
 
-INSERT INTO book_details(id, isbn, lang, publisher) VALUES
-   (100001, '0001', 'EN', 'WhiteBook'),
-   (100002, '0002', 'EN', 'BlackBook'),
-   (100003, '0003', 'EN', 'BlueBook'),
-   (100004, '0004', 'EN', 'RedBook')
+INSERT INTO book_details(id, isbn, lang, publisher, description) VALUES
+   (100001, '0001', 'EN', 'WhiteBook', ''),
+   (100002, '0002', 'EN', 'BlackBook', ''),
+   (100003, '0003', 'EN', 'BlueBook', ''),
+   (100004, '0004', 'EN', 'RedBook', '')
 ;
 INSERT INTO book_tag(id, tag_Value) VALUES
    (100010, 'lorem'),

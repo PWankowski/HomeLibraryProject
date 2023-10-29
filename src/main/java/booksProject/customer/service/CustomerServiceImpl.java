@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
     @Transactional
     @Override
-    public CustomerDto update(String uuid, CustomerForm customerForm) throws NoCustomerFoundException{
+    public CustomerDto update(String uuid, CustomerForm customerForm) throws NoCustomerFoundException {
 
         CustomerEntity result = customerRepository.findByUuid(uuid).orElseThrow(() -> new NoCustomerFoundException(uuid));
 
@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
     @Transactional
     @Override
-    public void delete(String uuid) throws NoCustomerFoundException{
+    public void delete(String uuid) throws NoCustomerFoundException {
 
         CustomerEntity result = customerRepository.findByUuid(uuid).orElseThrow(() -> new NoCustomerFoundException(uuid));
         customerRepository.delete(result);

@@ -50,7 +50,7 @@ public class BookEntity {
         return tags;
     }
 
-    public void addBookTag(BookTagEntity bookTag){
+    public void addBookTag(BookTagEntity bookTag) {
         if (tags == null) {
             tags = new HashSet<>();
         }
@@ -58,7 +58,7 @@ public class BookEntity {
         bookTag.getBooks().add(this);
     }
 
-    public void removeBookTag(BookTagEntity bookTag){
+    public void removeBookTag(BookTagEntity bookTag) {
         this.tags.remove(bookTag);
         bookTag.getBooks().remove(this);
     }

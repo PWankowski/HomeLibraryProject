@@ -20,30 +20,30 @@ public class CustomerController {
     }
 
     @GetMapping("/customer/{uuid}")
-    public ResponseEntity getCustomer(@PathVariable String uuid){
+    public ResponseEntity getCustomer(@PathVariable String uuid) {
 
          return ResponseEntity.ok(customerService.getCustomer(uuid));
     }
     @GetMapping("/customer/all")
-    public ResponseEntity getAllCustomers(){
+    public ResponseEntity getAllCustomers() {
 
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
     @PostMapping("/customer/create")
-    public ResponseEntity createCustomer(@RequestBody CustomerForm customerForm){
+    public ResponseEntity createCustomer(@RequestBody CustomerForm customerForm) {
 
         return ResponseEntity.ok(customerService.create(customerForm));
     }
 
     @PutMapping("/customer/update/{uuid}")
-    public ResponseEntity updateCustomer(@RequestBody CustomerForm customerForm, @PathVariable String uuid){
+    public ResponseEntity updateCustomer(@RequestBody CustomerForm customerForm, @PathVariable String uuid) {
 
         return ResponseEntity.ok(customerService.update(uuid, customerForm));
     }
 
     @DeleteMapping("/customer/delete/{uuid}")
-    public ResponseEntity deleteCustomer(@PathVariable String uuid){
+    public ResponseEntity deleteCustomer(@PathVariable String uuid) {
         try{
             customerService.delete(uuid);
             return ResponseEntity.ok(String.format("Customer with uuid: %s deleted", uuid));
@@ -53,7 +53,7 @@ public class CustomerController {
     }
 
     @ExceptionHandler(value = NoCustomerFoundException.class)
-    public ResponseEntity handleNoCustomerFoundException(NoCustomerFoundException exception){
+    public ResponseEntity handleNoCustomerFoundException(NoCustomerFoundException exception) {
         return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
