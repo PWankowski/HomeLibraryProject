@@ -6,4 +6,8 @@ public class NoBookFoundException extends RuntimeException{
         super(String.format("No Book with uuid: %s found!", uuid));
     }
 
+    public NoBookFoundException() {
+        super("Book not found!");
+    }
+
 }

@@ -4,12 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
+import java.util.List;
+
+
 @Getter
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GoogleBook {
+public class GoogleBookList {
 
-    private VolumeInfo volumeInfo;
+    private int totalItems;
+    private List<GoogleBook> items;
 }
-
-
