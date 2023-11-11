@@ -9,6 +9,7 @@ import booksProject.books.mappers.BookDetailsMapper;
 import booksProject.books.mappers.BookMapper;
 import booksProject.books.repository.BookTagRepository;
 import booksProject.books.repository.BooksRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class BookServiceImpl implements BookService {
 
 

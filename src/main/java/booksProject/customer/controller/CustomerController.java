@@ -4,11 +4,13 @@ package booksProject.customer.controller;
 import booksProject.customer.dto.CustomerForm;
 import booksProject.customer.service.CustomerService;
 import booksProject.customer.NoCustomerFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 public class CustomerController {
 
@@ -48,12 +50,14 @@ public class CustomerController {
             customerService.delete(uuid);
             return ResponseEntity.ok(String.format("Customer with uuid: %s deleted", uuid));
         } catch (Exception e){
+            log.error(e.getLocalizedMessage());
             return new ResponseEntity(String.format("Customer with uuid: %s wasn't deleted", uuid), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @ExceptionHandler(value = NoCustomerFoundException.class)
     public ResponseEntity handleNoCustomerFoundException(NoCustomerFoundException exception) {
+        log.warn(exception.getLocalizedMessage());
         return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

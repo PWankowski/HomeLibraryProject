@@ -3,11 +3,13 @@ package booksProject.books.controller;
 import booksProject.books.NoBookFoundException;
 import booksProject.books.dto.BookForm;
 import booksProject.books.service.BookService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/books/")
 public class BookController {
@@ -32,7 +34,6 @@ public class BookController {
 
     @GetMapping("getByUUID/{uuid}")
     public ResponseEntity getBookByUUID(@PathVariable String uuid) {
-
        return ResponseEntity.ok(bookService.findByUuid(uuid));
     }
 
@@ -56,7 +57,7 @@ public class BookController {
 
     @ExceptionHandler(value = NoBookFoundException.class)
     public ResponseEntity handleNoBookFoundException(NoBookFoundException exception) {
-
+        log.warn(exception.getLocalizedMessage());
         return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 }

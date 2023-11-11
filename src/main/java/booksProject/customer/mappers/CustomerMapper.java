@@ -14,24 +14,26 @@ public class CustomerMapper {
 
     public static CustomerDto mapToDto(CustomerEntity customer) {
 
-        return new CustomerDto()
-                .setUuid(customer.getUuid())
-                .setName(customer.getName())
-                .setSurname(customer.getSurname())
-                .setAge(customer.getAge())
-                .setEmailAddress(customer.getEmailAddress())
-                .setSex(customer.getSex());
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setUuid(customer.getUuid());
+        customerDto.setName(customer.getName());
+        customerDto.setSurname(customer.getSurname());
+        customerDto.setAge(customer.getAge());
+        customerDto.setEmailAddress(customer.getEmailAddress());
+        customerDto.setSex(customer.getSex());
+        return customerDto;
     }
 
     public static CustomerDto mapToDto(CustomerForm form) {
 
-        return new CustomerDto()
-                .setUuid(UUID.randomUUID().toString())
-                .setName(form.getName())
-                .setSurname(form.getSurname())
-                .setAge(form.getAge())
-                .setEmailAddress(form.getEmailAddress())
-                .setSex(form.getSex());
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setUuid(UUID.randomUUID().toString());
+        customerDto.setName(form.getName());
+        customerDto.setSurname(form.getSurname());
+        customerDto.setAge(form.getAge());
+        customerDto.setEmailAddress(form.getEmailAddress());
+        customerDto.setSex(form.getSex());
+        return customerDto;
     }
 
     public static List<CustomerDto> map(List<CustomerEntity> customerList) {
