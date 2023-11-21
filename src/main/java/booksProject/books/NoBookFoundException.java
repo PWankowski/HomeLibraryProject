@@ -2,12 +2,7 @@ package booksProject.books;
 
 public class NoBookFoundException extends RuntimeException{
 
-    public NoBookFoundException(String uuid) {
-        super(String.format("No Book with uuid: %s found!", uuid));
+    public NoBookFoundException(String message) {
+        super(message);
     }
-
-    public NoBookFoundException() {
-        super("Book not found!");
-    }
-
 }

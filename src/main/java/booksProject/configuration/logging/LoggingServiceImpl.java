@@ -1,4 +1,4 @@
-package booksProject.logconfiguration;
+package booksProject.configuration.logging;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

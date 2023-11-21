@@ -30,7 +30,7 @@ public class GoogleBooksServiceImpl implements GoogleBooksService {
 
            Pair<Integer, String> result =  googleClient.getBookVolume(idBook);
             if(result.getKey() != HttpStatus.OK.value()) {
-                throw new NoBookFoundException();
+                throw new NoBookFoundException(String.format("No Book with id: %s found!", idBook));
             }
            ObjectMapper objectMapper = new ObjectMapper();
            GoogleBook googleBook = objectMapper.readValue(result.getValue(), GoogleBook.class);
@@ -47,7 +47,7 @@ public class GoogleBooksServiceImpl implements GoogleBooksService {
         ObjectMapper objectMapper = new ObjectMapper();
         GoogleBookList googleBook = objectMapper.readValue(result.getValue(), GoogleBookList.class);
         if(googleBook.getTotalItems() == BigDecimal.ZERO.intValue()) {
-            throw new NoBookFoundException();
+            throw new NoBookFoundException("No Books  found!");
         }
         return GoogleBookMapper.mapGooGleBookListToDtoList(googleBook);
     }

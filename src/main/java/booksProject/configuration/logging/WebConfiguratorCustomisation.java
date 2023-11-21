@@ -1,4 +1,4 @@
-package booksProject.logconfiguration;
+package booksProject.configuration.logging;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

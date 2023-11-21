@@ -11,6 +11,8 @@ import booksProject.books.repository.BookTagRepository;
 import booksProject.books.repository.BooksRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -41,31 +43,31 @@ public class BookServiceImpl implements BookService {
     }
     @Override
     @Transactional(readOnly = true)
-    public List<BookDto> findAllByAuthor(String author) {
+    public List<BookDto> findAllByAuthor(String author) throws NoBookFoundException {
 
         if(author != null) {
             Optional<List<BookEntity>> result =  bookRepository.findAllByAuthor(author);
-            if(result.isPresent()){
+            if(!result.get().isEmpty()){
                return result.get().stream()
                        .map(bookEntity -> BookMapper.map(bookEntity))
                        .collect(Collectors.toList());
             }
-            return bookRepository.findAll().stream()
-                    .map(bookEntity -> BookMapper.map(bookEntity))
-                    .collect(Collectors.toList());
+             throw new NoBookFoundException(String.format("No Books for author: %s found!", author));
         }
         return bookRepository.findAll().stream()
                 .map(bookEntity -> BookMapper.map(bookEntity))
                 .collect(Collectors.toList());
     }
     @Override
-    public BookDto findByUuid(String uuid) throws NoBookFoundException{
+    @Transactional
+    @Cacheable(cacheNames = "findByUUID", key = "#uuid")
+    public BookDto findByUuid(String uuid) throws NoBookFoundException {
 
         BookEntity book = bookRepository.findByUuid(uuid).orElse(null);
         if(book != null){
            return BookMapper.map(book);
         }
-        throw new NoBookFoundException(uuid);
+        throw new NoBookFoundException(String.format("No Book with uuid: %s found!", uuid));
     }
     @Override
     public BookDto create(BookForm form) {
@@ -79,12 +81,11 @@ public class BookServiceImpl implements BookService {
         for(BookTagEntity tag : bookTags) {
             book.addBookTag(tag);
         }
-
         return BookMapper.map(bookRepository.save(book));
     }
     @Override
     @Transactional
-    public boolean delete(String uuid) throws NoBookFoundException{
+    public boolean delete(String uuid) throws NoBookFoundException {
 
         Optional<BookEntity> result = bookRepository.findByUuid(uuid);
         if(result.isPresent()){
@@ -96,24 +97,22 @@ public class BookServiceImpl implements BookService {
           bookRepository.delete(book);
           return true;
         }
-        throw new NoBookFoundException(uuid);
+        throw new NoBookFoundException(String.format("No Book with uuid: %s found!", uuid));
     }
 
     @Override
+    @CachePut(cacheNames = "findByUUID", key = "#result.uuid")
     public BookDto update(String uuid, BookForm form) {
 
         Optional<BookEntity> bookOpt = bookRepository.findByUuid(uuid);
-        if (bookOpt.isPresent()) {
-            BookEntity updatedBookEntity = bookOpt.get();
-            updatedBookEntity.setTitle(form.getTitle());
-            updatedBookEntity.setAuthor(form.getAuthor());
-            updatedBookEntity.setDetails(BookDetailsMapper.map(form.getDetails()));
-            Set<String> bookFormTags = form.getTags();
-            updateTags(bookFormTags, updatedBookEntity);
+        BookEntity updatedBookEntity = bookOpt.get();
+        updatedBookEntity.setTitle(form.getTitle());
+        updatedBookEntity.setAuthor(form.getAuthor());
+        updatedBookEntity.setDetails(BookDetailsMapper.map(form.getDetails()));
+        Set<String> bookFormTags = form.getTags();
+        updateTags(bookFormTags, updatedBookEntity);
 
-            return BookMapper.map(bookRepository.saveAndFlush(updatedBookEntity));
-        }
-        return new BookDto();
+        return BookMapper.map(bookRepository.saveAndFlush(updatedBookEntity));
     }
 
     private void updateTags(Set<String> tagsForm, BookEntity book) {

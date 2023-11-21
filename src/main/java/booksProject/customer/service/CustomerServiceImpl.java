@@ -8,6 +8,8 @@ import booksProject.customer.entity.CustomerEntity;
 import booksProject.customer.mappers.CustomerMapper;
 import booksProject.customer.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +27,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional(readOnly = true)
     @Override
+    @Cacheable(cacheNames = "getCustomer", key = "#uuid")
     public CustomerDto getCustomer(String uuid) throws NoCustomerFoundException {
 
         return CustomerMapper.mapToDto(customerRepository.findByUuid(uuid).orElseThrow(() -> new NoCustomerFoundException(uuid)));
@@ -47,6 +50,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
     @Transactional
     @Override
+    @CachePut(cacheNames = "getCustomer", key = "#result.uuid")
     public CustomerDto update(String uuid, CustomerForm customerForm) throws NoCustomerFoundException {
 
         CustomerEntity result = customerRepository.findByUuid(uuid).orElseThrow(() -> new NoCustomerFoundException(uuid));
