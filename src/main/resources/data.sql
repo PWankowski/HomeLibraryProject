@@ -1,8 +1,8 @@
-INSERT INTO customer( uuid, name, surname, age, sex, email_address) VALUES
-   ( 'b1ca1df8-2fbc-11ee-be56-0242ac120002', 'Jacek', 'Bąk', 20, 'M', 'bąk123@gmail.com'),
-   ( 'b80f5872-2fbc-11ee-be56-0242ac120001', 'Paweł', 'Zalewski', 45, 'M', 'zalew12@gmail.com'),
-   ( 'bc203512-2fbc-11ee-be56-0242ac120003', 'Anna', 'Kogut', 34, 'F', 'kukuryku@gmail.com'),
-   ( 'bfa25bde-2fbc-11ee-be56-0242ac120004', 'Katarzyna', 'Wrzęsicka', 18, 'F', 'brząszcz@gmail.com')
+INSERT INTO user_entity( name, surname, age, sex, email_address, login, password, role) VALUES
+   (  'Jacek', 'Bąk', 20, 'M', 'bak123@gmail.com', 'test1', 'test1', 'ADMIN'),
+   (  'Paweł', 'Zalewski', 45, 'M', 'zalew12@gmail.com', 'test2', 'test2','USER'),
+   (  'Anna', 'Kogut', 34, 'F', 'kukuryku@gmail.com', 'test3', 'test3', 'USER'),
+   (  'Katarzyna', 'Wrzęsicka', 18, 'F', 'brzaszcz@gmail.com', 'test4', 'test4', 'USER')
 ;
 
 INSERT INTO book_details(id, isbn, lang, publisher, description) VALUES

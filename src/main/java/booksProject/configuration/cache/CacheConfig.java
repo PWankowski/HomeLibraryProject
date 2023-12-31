@@ -2,8 +2,8 @@ package booksProject.configuration.cache;
 
 import booksProject.books.dto.BookDto;
 import booksProject.configuration.cache.serializers.BookDtoSerializer;
-import booksProject.configuration.cache.serializers.CustomerDtoSerializer;
-import booksProject.customer.dto.CustomerDto;
+import booksProject.configuration.cache.serializers.UserDtoSerializer;
+import booksProject.user.dto.UserDto;
 import org.ehcache.config.CacheConfiguration;
 import org.ehcache.config.builders.CacheConfigurationBuilder;
 import org.ehcache.config.builders.ExpiryPolicyBuilder;
@@ -34,10 +34,10 @@ public class CacheConfig {
         CacheManager cacheManager = provider.getCacheManager();
 
         CacheConfiguration<String, BookDto> cacheConfigurationForBookDto = implementsCacheConfigurationWithSerializer(String.class, BookDto.class, 5, 2, new BookDtoSerializer());
-        CacheConfiguration<String, CustomerDto> cacheConfigurationForCustomerDto = implementsCacheConfigurationWithSerializer(String.class, CustomerDto.class, 10, 5, new CustomerDtoSerializer());
+        CacheConfiguration<String, UserDto> cacheConfigurationForCustomerDto = implementsCacheConfigurationWithSerializer(String.class, UserDto.class, 10, 5, new UserDtoSerializer());
 
-        cacheManager.createCache("findByUUID", Eh107Configuration.fromEhcacheCacheConfiguration(cacheConfigurationForBookDto));
-        cacheManager.createCache("getCustomer", Eh107Configuration.fromEhcacheCacheConfiguration(cacheConfigurationForCustomerDto));
+        cacheManager.createCache("findByEmail", Eh107Configuration.fromEhcacheCacheConfiguration(cacheConfigurationForBookDto));
+        cacheManager.createCache("getUser", Eh107Configuration.fromEhcacheCacheConfiguration(cacheConfigurationForCustomerDto));
         return cacheManager;
     }
 

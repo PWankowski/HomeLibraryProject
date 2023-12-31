@@ -1,6 +1,6 @@
 package booksProject.configuration.cache.serializers;
 
-import booksProject.customer.dto.CustomerDto;
+import booksProject.user.dto.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ehcache.spi.serialization.Serializer;
 import org.ehcache.spi.serialization.SerializerException;
@@ -8,9 +8,9 @@ import org.ehcache.spi.serialization.SerializerException;
 import java.io.*;
 import java.nio.ByteBuffer;
 
-public class CustomerDtoSerializer implements Serializer<CustomerDto> {
+public class UserDtoSerializer implements Serializer<UserDto> {
     @Override
-    public ByteBuffer serialize(CustomerDto customerDto) throws SerializerException {
+    public ByteBuffer serialize(UserDto userDto) throws SerializerException {
         try{
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ObjectOutputStream oout = new ObjectOutputStream(baos);
@@ -18,7 +18,7 @@ public class CustomerDtoSerializer implements Serializer<CustomerDto> {
             String json = new ObjectMapper()
                     .writer()
                     .withDefaultPrettyPrinter()
-                    .writeValueAsString(customerDto);
+                    .writeValueAsString(userDto);
             oout.writeObject(json);
             oout.flush();
             oout.close();
@@ -30,7 +30,7 @@ public class CustomerDtoSerializer implements Serializer<CustomerDto> {
     }
 
     @Override
-    public CustomerDto read(ByteBuffer byteBuffer) throws ClassNotFoundException, SerializerException {
+    public UserDto read(ByteBuffer byteBuffer) throws ClassNotFoundException, SerializerException {
 
         try{
             byte[] bytes = new byte[byteBuffer.remaining()];
@@ -40,15 +40,15 @@ public class CustomerDtoSerializer implements Serializer<CustomerDto> {
             Object object = ois.readObject();
             bais.close();
             ois.close();
-            return new ObjectMapper().reader().forType(CustomerDto.class).readValue(object.toString());
+            return new ObjectMapper().reader().forType(UserDto.class).readValue(object.toString());
         } catch (IOException e) {
             throw new SerializerException(e);
         }
     }
 
     @Override
-    public boolean equals(CustomerDto customerDto, ByteBuffer byteBuffer) throws ClassNotFoundException, SerializerException {
-        return customerDto.equals(read(byteBuffer));
+    public boolean equals(UserDto userDto, ByteBuffer byteBuffer) throws ClassNotFoundException, SerializerException {
+        return userDto.equals(read(byteBuffer));
     }
 
 }
