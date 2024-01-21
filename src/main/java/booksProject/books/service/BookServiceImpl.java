@@ -1,5 +1,6 @@
 package booksProject.books.service;
 
+import booksProject.books.BookExistException;
 import booksProject.books.NoBookFoundException;
 import booksProject.books.dto.BookDto;
 import booksProject.books.dto.BookForm;
@@ -9,6 +10,7 @@ import booksProject.books.mappers.BookDetailsMapper;
 import booksProject.books.mappers.BookMapper;
 import booksProject.books.repository.BookTagRepository;
 import booksProject.books.repository.BooksRepository;
+import booksProject.shelves.entity.BookShelf;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
@@ -63,14 +65,15 @@ public class BookServiceImpl implements BookService {
     @Cacheable(cacheNames = "findByUUID", key = "#uuid")
     public BookDto findByUuid(String uuid) throws NoBookFoundException {
 
-        BookEntity book = bookRepository.findByUuid(uuid).orElse(null);
-        if(book != null){
-           return BookMapper.map(book);
-        }
-        throw new NoBookFoundException(String.format("No Book with uuid: %s found!", uuid));
+        BookEntity book = bookRepository.findByUuid(uuid).orElseThrow(() -> new NoBookFoundException(String.format("No Book with uuid: %s found!", uuid)));
+        return BookMapper.map(book);
     }
     @Override
-    public BookDto create(BookForm form) {
+    public BookDto create(BookForm form) throws BookExistException {
+        Boolean isBookPresent = validateBook(form);
+        if(isBookPresent){
+            throw new BookExistException("Book with this Author and Title exist!");
+        }
         BookEntity book = BookMapper.map(form);
         Set<String> bookTagsString = form.getTags();
 
@@ -90,9 +93,13 @@ public class BookServiceImpl implements BookService {
         Optional<BookEntity> result = bookRepository.findByUuid(uuid);
         if(result.isPresent()){
           BookEntity book =  result.get();
-          List<BookTagEntity> tags =  book.getTags().stream().collect(Collectors.toList());
+          List<BookTagEntity> tags =  book.getTags().stream().toList();
           for(int i=0; i<tags.size(); i++) {
               book.removeBookTag(tags.get(i));
+          }
+          List<BookShelf> bookShelves = book.getBookShelves().stream().toList();
+          for(int i=0; i<bookShelves.size(); i++) {
+              book.removeBookShelf(bookShelves.get(i));
           }
           bookRepository.delete(book);
           return true;
@@ -146,5 +153,26 @@ public class BookServiceImpl implements BookService {
                     return bookTagEntity;
                 })
                 .collect(Collectors.toSet());
+    }
+
+    private boolean validateBook(BookForm form) {
+
+      String author =  form.getAuthor();
+      String title = form.getTitle().toLowerCase().replace(" ", "");
+
+      List<BookEntity> booksByAuthor = bookRepository.findAllByAuthor(author).get();
+
+      if(booksByAuthor.isEmpty()){
+          return false;
+      }
+     long result = booksByAuthor.stream()
+              .map(book -> book.getTitle().toLowerCase().replace(" ", ""))
+              .filter(bookTitle -> bookTitle.equals(title))
+              .count();
+
+      if(result != 0){
+          return true;
+      }
+      return false;
     }
 }

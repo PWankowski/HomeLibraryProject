@@ -1,5 +1,6 @@
 package booksProject.books.entity;
 
+import booksProject.shelves.entity.BookShelf;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,10 +26,12 @@ public class BookEntity {
     @Setter
     private String author;
 
+    @Getter
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "details_id", referencedColumnName = "id")
     private BookDetailsEntity details;
 
+    @Getter
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "books_tags",
@@ -37,17 +40,18 @@ public class BookEntity {
     )
     private Set<BookTagEntity> tags;
 
-    public BookDetailsEntity getDetails() {
-        return details;
-    }
+    @Getter
+    @ManyToMany
+    @JoinTable(
+            name = "books_bookshelves",
+            joinColumns = { @JoinColumn(name = "book_id") },
+            inverseJoinColumns = { @JoinColumn(name = "bookshelves_id") }
+    )
+    private Set<BookShelf> bookShelves;
 
     public BookEntity setDetails(BookDetailsEntity details) {
         this.details = details;
         return this;
-    }
-
-    public Set<BookTagEntity> getTags() {
-        return tags;
     }
 
     public void addBookTag(BookTagEntity bookTag) {
@@ -61,5 +65,10 @@ public class BookEntity {
     public void removeBookTag(BookTagEntity bookTag) {
         this.tags.remove(bookTag);
         bookTag.getBooks().remove(this);
+    }
+
+    public void removeBookShelf(BookShelf bookShelf) {
+        this.bookShelves.remove(bookShelf);
+        bookShelf.getItems().remove(this);
     }
 }

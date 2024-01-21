@@ -27,7 +27,6 @@ import static org.ehcache.config.builders.ResourcePoolsBuilder.newResourcePoolsB
 @EnableCaching
 public class CacheConfig {
 
-
     @Bean
     public CacheManager setCacheManager() {
         CachingProvider provider = Caching.getCachingProvider();
@@ -36,7 +35,7 @@ public class CacheConfig {
         CacheConfiguration<String, BookDto> cacheConfigurationForBookDto = implementsCacheConfigurationWithSerializer(String.class, BookDto.class, 5, 2, new BookDtoSerializer());
         CacheConfiguration<String, UserDto> cacheConfigurationForCustomerDto = implementsCacheConfigurationWithSerializer(String.class, UserDto.class, 10, 5, new UserDtoSerializer());
 
-        cacheManager.createCache("findByEmail", Eh107Configuration.fromEhcacheCacheConfiguration(cacheConfigurationForBookDto));
+        cacheManager.createCache("findByUUID", Eh107Configuration.fromEhcacheCacheConfiguration(cacheConfigurationForBookDto));
         cacheManager.createCache("getUser", Eh107Configuration.fromEhcacheCacheConfiguration(cacheConfigurationForCustomerDto));
         return cacheManager;
     }

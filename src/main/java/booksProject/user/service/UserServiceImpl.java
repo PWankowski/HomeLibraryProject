@@ -18,6 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -43,8 +45,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthenticationResponse create(UserForm userForm) {
-
+    public AuthenticationResponse create(UserForm userForm) throws UserExistException{
+        String email =  userForm.getEmailAddress();
+        String login = userForm.getLogin();
+        if(!validateIfUserExist(email,login)){
+            throw new UserExistException();
+        }
         UserEntity userEntity = UserMapper.mapToEntity(userForm);
         userRepository.save(userEntity);
         String jwtToken = jwtService.generateToken(userEntity);
@@ -52,17 +58,31 @@ public class UserServiceImpl implements UserService {
     }
     @Transactional
     @Override
-    @CachePut(cacheNames = "getUser", key = "#result.email")
+    @CachePut(cacheNames = "getUser", key = "#result.emailAddress")
     public UserDto update(String email, UserForm userForm) throws NoUserFoundException {
 
         UserEntity result = userRepository.findByEmailAddress(email).orElseThrow(() -> new NoUserFoundException(email));
-        result.setName(userForm.getName());
-        result.setSurname(userForm.getSurname());
-        result.setAge(userForm.getAge());
-        result.setSex(userForm.getSex());
-        result.setEmailAddress(userForm.getEmailAddress());
-        result.setLogin(userForm.getLogin());
-        result.setPassword(userForm.getPassword());
+        if(userForm.getName() != null) {
+            result.setName(userForm.getName());
+        }
+        if(userForm.getSurname() != null) {
+            result.setSurname(userForm.getSurname());
+        }
+        if(userForm.getAge() != 0) {
+            result.setAge(userForm.getAge());
+        }
+        if(userForm.getSex() != null) {
+            result.setSex(userForm.getSex());
+        }
+        if(userForm.getSex() != null) {
+            result.setEmailAddress(userForm.getEmailAddress());
+        }
+        if(userForm.getLogin() != null) {
+            result.setLogin(userForm.getLogin());
+        }
+        if(userForm.getPassword() != null) {
+            result.setPassword(userForm.getPassword());
+        }
 
         userRepository.save(result);
         return UserMapper.mapToDto(result);
@@ -83,9 +103,22 @@ public class UserServiceImpl implements UserService {
                         request.getLogin(),
                         request.getPassword()
                 )
-        );
+         );
         UserEntity user = userRepository.findByLogin(request.getLogin()).orElseThrow(() -> new NoUserFoundException(request.getLogin()));
         String jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+
+    private boolean validateIfUserExist(String email, String login) {
+
+        Optional<UserEntity> userByEmail = userRepository.findByEmailAddress(email);
+        if(userByEmail.isEmpty()){
+            return true;
+        }
+        Optional<UserEntity> userBylogin = userRepository.findByLogin(login);
+        if(userBylogin.isEmpty()){
+            return true;
+        }
+        return false;
     }
 }

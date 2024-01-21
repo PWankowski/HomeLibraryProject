@@ -36,6 +36,7 @@ public class RegistryController {
     }
     @ExceptionHandler(value = UserExistException.class)
     public ResponseEntity handleUserExistException(UserExistException exception) {
+
         log.warn(exception.getLocalizedMessage());
         return  new ResponseEntity(exception.getMessage(), HttpStatus.CONFLICT);
     }

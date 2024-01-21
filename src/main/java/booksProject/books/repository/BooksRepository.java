@@ -13,4 +13,5 @@ public interface BooksRepository extends JpaRepository<BookEntity,Long> {
      Optional<BookEntity> findByUuid(String uuid);
 
      Optional<List<BookEntity>> findAllByAuthor(String author);
+
 }

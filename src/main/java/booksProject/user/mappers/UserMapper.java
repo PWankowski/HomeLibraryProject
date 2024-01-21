@@ -21,23 +21,23 @@ public class UserMapper {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public static UserDto mapToDto(UserEntity customer) {
+    public static UserDto mapToDto(UserEntity user) {
 
         return UserDto.builder()
-                .name(customer.getName())
-                .surname(customer.getSurname())
-                .age(customer.getAge())
-                .emailAddress(customer.getEmailAddress())
-                .sex(customer.getSex())
-                .password(customer.getPassword())
-                .login(customer.getLogin())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .age(user.getAge())
+                .emailAddress(user.getEmailAddress())
+                .sex(user.getSex())
+                .password(user.getPassword())
+                .login(user.getLogin())
                 .build();
     }
 
-    public static List<UserDto> map(List<UserEntity> customerList) {
+    public static List<UserDto> map(List<UserEntity> userList) {
 
-       return customerList.stream()
-                .map(customer -> mapToDto(customer))
+       return userList.stream()
+                .map(user -> mapToDto(user))
                 .collect(Collectors.toList());
     }
 

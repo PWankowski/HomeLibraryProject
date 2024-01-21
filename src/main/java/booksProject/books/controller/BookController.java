@@ -1,5 +1,6 @@
 package booksProject.books.controller;
 
+import booksProject.books.BookExistException;
 import booksProject.books.NoBookFoundException;
 import booksProject.books.dto.BookForm;
 import booksProject.books.service.BookService;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/books/")
 public class BookController {
 
-    private BookService bookService;
+    private final BookService bookService;
 
     @Autowired
     public BookController(BookService bookService) {
@@ -57,7 +58,15 @@ public class BookController {
 
     @ExceptionHandler(value = NoBookFoundException.class)
     public ResponseEntity handleNoBookFoundException(NoBookFoundException exception) {
+
         log.warn(exception.getLocalizedMessage());
         return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = BookExistException.class)
+    public ResponseEntity handleBookExistException(BookExistException exception) {
+
+        log.warn(exception.getLocalizedMessage());
+        return  new ResponseEntity(exception.getMessage(), HttpStatus.CONFLICT);
     }
 }

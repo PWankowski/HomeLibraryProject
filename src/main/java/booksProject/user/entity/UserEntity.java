@@ -1,6 +1,7 @@
 package booksProject.user.entity;
 
 
+import booksProject.shelves.entity.BookShelf;
 import booksProject.user.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user_entity")
@@ -34,6 +36,9 @@ public class UserEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<BookShelf> shelves;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
