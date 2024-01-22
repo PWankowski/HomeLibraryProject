@@ -31,7 +31,7 @@ public class GoogleBooksController {
         }
     }
 
-    @GetMapping("/book")
+    @GetMapping("/books")
     public ResponseEntity getBooks(@RequestParam String parameters) {
 
         try {

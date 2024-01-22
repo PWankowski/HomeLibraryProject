@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GoogleBook {
 
+    private String id;
     private VolumeInfo volumeInfo;
 }
 

@@ -18,6 +18,7 @@ public class GoogleBookMapper {
         } else{
             bookDto.setAuthor(book.getVolumeInfo().getAutors().toString());
         }
+        bookDto.setUuid(book.getId());
         bookDto.setTitle(book.getVolumeInfo().getTitle());
         bookDto.setDetails(BookDetailsMapper.map(book));
         bookDto.setTags(Set.of(""));
