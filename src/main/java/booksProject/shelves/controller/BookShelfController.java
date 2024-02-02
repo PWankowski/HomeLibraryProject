@@ -1,6 +1,7 @@
 package booksProject.shelves.controller;
 
 
+import booksProject.books.NoBookFoundException;
 import booksProject.shelves.BookShelfExistException;
 import booksProject.shelves.NoBookShelfExistException;
 import booksProject.shelves.entity.BookShelfForm;
@@ -82,6 +83,12 @@ public class BookShelfController {
     }
     @ExceptionHandler(value = NoUserFoundException.class)
     public ResponseEntity handleNoUserFoundException(NoUserFoundException exception) {
+        log.warn(exception.getLocalizedMessage());
+        return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(value = NoBookFoundException.class)
+    public ResponseEntity handleNoBookFoundException(NoBookFoundException exception) {
+
         log.warn(exception.getLocalizedMessage());
         return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
     }

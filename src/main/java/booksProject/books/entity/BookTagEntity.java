@@ -4,12 +4,14 @@ package booksProject.books.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "book_tag")
+@ToString
 public class BookTagEntity {
 
     @Id

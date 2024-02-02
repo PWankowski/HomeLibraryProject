@@ -45,12 +45,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthenticationResponse create(UserForm userForm) throws UserExistException{
+    public AuthenticationResponse create(UserForm userForm) throws UserExistException {
         String email =  userForm.getEmailAddress();
         String login = userForm.getLogin();
-        if(!validateIfUserExist(email,login)){
-            throw new UserExistException();
-        }
+        validateIfUserExist(email,login);
+
         UserEntity userEntity = UserMapper.mapToEntity(userForm);
         userRepository.save(userEntity);
         String jwtToken = jwtService.generateToken(userEntity);
@@ -109,16 +108,15 @@ public class UserServiceImpl implements UserService {
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
-    private boolean validateIfUserExist(String email, String login) {
+    private void validateIfUserExist(String email, String login) throws UserExistException {
 
         Optional<UserEntity> userByEmail = userRepository.findByEmailAddress(email);
-        if(userByEmail.isEmpty()){
-            return true;
+        if(!userByEmail.isEmpty()){
+            throw new UserExistException();
         }
-        Optional<UserEntity> userBylogin = userRepository.findByLogin(login);
-        if(userBylogin.isEmpty()){
-            return true;
+        Optional<UserEntity> userByLogin = userRepository.findByLogin(login);
+        if(!userByLogin.isEmpty()){
+            throw new UserExistException();
         }
-        return false;
     }
 }
