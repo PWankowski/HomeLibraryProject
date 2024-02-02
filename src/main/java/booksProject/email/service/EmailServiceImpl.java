@@ -20,7 +20,7 @@ import java.util.Set;
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
-    public static final String SHELVES_WITH_BOOKS = "Your books shelves to read in the feature";
+    public static final String SHELVES_WITH_BOOKS = "Your books shelves that you want to read in the future";
     private String host;
     private String fromEmail;
     private final JavaMailSender emailSender;
@@ -75,7 +75,7 @@ public class EmailServiceImpl implements EmailService {
                             books.append("Tag : " + bookTag.getTagValue() + System.getProperty("line.separator"));
                         }
                     }
-                    books.append("----------------------------------------------------------" + System.getProperty("line.separator"));
+                    books.append("-------------------------------" + System.getProperty("line.separator"));
                 }
             }
             books.append(System.getProperty("line.separator"));
