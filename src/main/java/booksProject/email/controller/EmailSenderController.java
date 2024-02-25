@@ -17,10 +17,17 @@ public class EmailSenderController {
 
     private final EmailService emailService;
 
-    @PostMapping("sendEmail")
-    public ResponseEntity sendEmail(@RequestParam String login){
+    @PostMapping("sendSimpleEmail")
+    public ResponseEntity sendSimpleEmail(@RequestParam String login){
 
         emailService.sendSimpleMailMessage(login);
+        return  ResponseEntity.ok("Email sent");
+    }
+
+    @PostMapping("sendHtmlEmail")
+    public ResponseEntity sendHtmlEmail(@RequestParam String login){
+
+        emailService.sendHtmlMailMessage(login);
         return  ResponseEntity.ok("Email sent");
     }
 

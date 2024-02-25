@@ -7,32 +7,34 @@ import booksProject.shelves.entity.BookShelf;
 import booksProject.user.NoUserFoundException;
 import booksProject.user.entity.UserEntity;
 import booksProject.user.repository.UserRepository;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
+
 import java.util.List;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class EmailServiceImpl implements EmailService {
 
     public static final String SHELVES_WITH_BOOKS = "Your books shelves that you want to read in the future";
+    @Value("${spring.mail.verify.host}")
     private String host;
+    @Value("${spring.mail.username}")
     private String fromEmail;
     private final JavaMailSender emailSender;
+    private final TemplateEngine templateEngine;
     private final UserRepository userRepository;
 
-    @Autowired
-    public EmailServiceImpl(@Value("${spring.mail.verify.host}") String host, @Value("${spring.mail.username}") String fromEmail, JavaMailSender emailSender, UserRepository userRepository) {
-        this.host = host;
-        this.fromEmail = fromEmail;
-        this.emailSender = emailSender;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public void sendSimpleMailMessage(String login) throws EmailSendingException{
@@ -47,6 +49,31 @@ public class EmailServiceImpl implements EmailService {
             message.setTo(receiverEmail);
             message.setText(content);
             emailSender.send(message);
+        } catch (Exception exception) {
+            log.error(exception.getLocalizedMessage());
+            throw new EmailSendingException("Error while sending email! : " + exception.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void sendHtmlMailMessage(String login) {
+
+        UserEntity user = userRepository.findByLogin(login).orElseThrow( () -> new NoUserFoundException(login));
+        Object[] shelves = user.getShelves().toArray();
+        String receiverEmail = user.getEmailAddress();
+        try {
+            Context context = new Context();
+            context.setVariable("booksShelves", shelves);
+            String text = templateEngine.process("emailTemplate", context);
+            MimeMessage message = emailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setPriority(1);
+            helper.setSubject(SHELVES_WITH_BOOKS);
+            helper.setFrom(fromEmail);
+            helper.setTo(receiverEmail);
+            helper.setText(text, true);
+            emailSender.send(message);
+
         } catch (Exception exception) {
             log.error(exception.getLocalizedMessage());
             throw new EmailSendingException("Error while sending email! : " + exception.getLocalizedMessage());
