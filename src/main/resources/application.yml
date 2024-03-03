@@ -1,0 +1,54 @@
+spring:
+  profiles:
+    active: ${ACTIVE_PROFILE:dev}
+
+  h2:
+    console:
+      enabled: true
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: ${DATABASE_USER_NAME}
+    password: ${DATABASE_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true
+    show-sql: true
+  mail:
+    host: ${EMAIL_HOST}
+    port: ${EMAIL_PORT}
+    username: ${EMAIL_ID}
+    password: ${EMAIL_PASSWORD}
+    default_encoding: UTF-8
+    properties:
+      mail:
+        mime:
+          charset: UTF
+        smtp:
+          writetimeout: 10000
+          connectiontimeout: 10000
+          timeout: 10000
+          auth: true
+          starttls:
+            enable: true
+            required: true
+        debug: true
+    verify:
+      host: ${VERIFY_EMAIL_HOST}
+
+server:
+  port: ${SERVER_PORT}
+
+logging:
+  file:
+    path: ${LOGGING_PATH}
+    name: ${LOGGING_FILE_NAME}
+
+#GooGle Books
+googleBookApi:
+  url: https://www.googleapis.com/books/v1
+    
+
+
+
+
