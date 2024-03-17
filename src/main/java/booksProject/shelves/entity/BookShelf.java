@@ -56,7 +56,6 @@ public class BookShelf {
     }
 
     public void removeUser(UserEntity user) {
-        this.user = null;
         user.getShelves().remove(this);
     }
 }

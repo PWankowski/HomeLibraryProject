@@ -1,6 +1,7 @@
 package booksProject.books.entity;
 
 import booksProject.shelves.entity.BookShelf;
+import booksProject.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,6 +52,11 @@ public class BookEntity {
     )
     private Set<BookShelf> bookShelves;
 
+    @Getter
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private UserEntity user;
+
     public BookEntity setDetails(BookDetailsEntity details) {
         this.details = details;
         return this;
@@ -72,5 +78,14 @@ public class BookEntity {
     public void removeBookShelf(BookShelf bookShelf) {
         this.bookShelves.remove(bookShelf);
         bookShelf.getItems().remove(this);
+    }
+
+    public void addUser(UserEntity user) {
+        this.user = user;
+        user.getBooks().add(this);
+    }
+
+    public void removeRelatedUserFromBook(UserEntity user) {
+        user.removeBook(this);
     }
 }

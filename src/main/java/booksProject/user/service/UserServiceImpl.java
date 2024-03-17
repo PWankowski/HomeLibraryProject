@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(result);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws NoUserFoundException{
          authenticationManager.authenticate(

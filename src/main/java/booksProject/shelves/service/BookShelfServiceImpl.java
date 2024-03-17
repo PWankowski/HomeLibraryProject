@@ -15,6 +15,7 @@ import booksProject.user.entity.UserEntity;
 import booksProject.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class BookShelfServiceImpl implements BookShelfService {
     }
 
     @Override
+    @Transactional
     public BookShelfDto createBookShelf(String login, BookShelfForm bookShelfForm) throws BookShelfExistException, NoUserFoundException {
 
         UserEntity user = userRepository.findByLogin(login).orElse(null);
@@ -62,6 +64,7 @@ public class BookShelfServiceImpl implements BookShelfService {
     }
 
     @Override
+    @Transactional
     public void deleteBookShelf(Long id) throws NoBookShelfExistException {
 
         BookShelf bookShelf = validateBookShelfExistAndReturnValueOrThrowException(id);
@@ -72,10 +75,10 @@ public class BookShelfServiceImpl implements BookShelfService {
         for(int i=0; i<items.size(); i++) {
             bookShelf.removeItem(items.get(i));
         }
-        bookShelfRepository.save(bookShelf);
         bookShelfRepository.delete(bookShelf);
     }
     @Override
+    @Transactional(readOnly = true)
     public List<BookShelfDto> getAllByUser(String userLogin) {
 
         List<BookShelfDto> bookShelvesByUser = new ArrayList<>();
@@ -96,6 +99,7 @@ public class BookShelfServiceImpl implements BookShelfService {
     }
 
     @Override
+    @Transactional
     public BookShelfDto updateBookShelf(Long id, String name) throws NoBookShelfExistException {
 
         BookShelf bookShelf = validateBookShelfExistAndReturnValueOrThrowException(id);
@@ -104,6 +108,7 @@ public class BookShelfServiceImpl implements BookShelfService {
     }
 
     @Override
+    @Transactional
     public BookShelfDto addBooksToBookShelf(Long idBookShelf, List<String> booksUUIDs) throws NoBookShelfExistException, NoBookFoundException {
 
         BookShelf bookShelf = validateBookShelfExistAndReturnValueOrThrowException(idBookShelf);
@@ -127,6 +132,7 @@ public class BookShelfServiceImpl implements BookShelfService {
     }
 
     @Override
+    @Transactional
     public void deleteBookFromBookShelf(Long idBookShelf, String bookUUID) throws NoBookShelfExistException {
 
         BookShelf bookShelf = validateBookShelfExistAndReturnValueOrThrowException(idBookShelf);

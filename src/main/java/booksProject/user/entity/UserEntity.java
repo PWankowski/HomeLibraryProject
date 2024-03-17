@@ -1,6 +1,7 @@
 package booksProject.user.entity;
 
 
+import booksProject.books.entity.BookEntity;
 import booksProject.shelves.entity.BookShelf;
 import booksProject.user.Role;
 import jakarta.persistence.*;
@@ -40,6 +41,9 @@ public class UserEntity implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<BookShelf> shelves;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<BookEntity> books;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
@@ -73,6 +77,10 @@ public class UserEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void removeBook(BookEntity book) {
+        this.books.remove(book);
     }
 
 }

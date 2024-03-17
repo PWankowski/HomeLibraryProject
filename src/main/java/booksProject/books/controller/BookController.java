@@ -4,6 +4,7 @@ import booksProject.books.BookExistException;
 import booksProject.books.NoBookFoundException;
 import booksProject.books.dto.BookForm;
 import booksProject.books.service.BookService;
+import booksProject.user.NoUserFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,31 +24,32 @@ public class BookController {
     }
 
     @GetMapping("getAllByAuthor")
-    public ResponseEntity getAllBooksByAuthor(@RequestParam String author) {
+    public ResponseEntity getAllBooksByAuthor(@RequestParam String author, @RequestParam String userLogin) {
 
-       return ResponseEntity.ok(bookService.findAllByAuthor(author));
+       return ResponseEntity.ok(bookService.findAllByAuthor(author, userLogin));
     }
-    @GetMapping("getAll")
-    public ResponseEntity getAll() {
+    @GetMapping("getAll/{userLogin}")
+    public ResponseEntity getAll(@PathVariable String userLogin) {
 
-       return ResponseEntity.ok(bookService.findAll());
+       return ResponseEntity.ok(bookService.findAll(userLogin));
     }
 
     @GetMapping("getByUUID/{uuid}")
     public ResponseEntity getBookByUUID(@PathVariable String uuid) {
+
        return ResponseEntity.ok(bookService.findByUuid(uuid));
     }
 
     @PostMapping("createBook")
-    public ResponseEntity createBook(@RequestBody BookForm formBook) {
+    public ResponseEntity createBook(@RequestBody BookForm formBook, @RequestParam String userLogin) {
 
-      return  ResponseEntity.ok(bookService.create(formBook));
+      return  ResponseEntity.ok(bookService.create(formBook, userLogin));
     }
 
-    @DeleteMapping("deleteByUUID/{uuid}")
-    public ResponseEntity deleteBook(@PathVariable String uuid) {
+    @DeleteMapping("deleteByUUID")
+    public ResponseEntity deleteBook(@RequestParam String uuid, @RequestParam String userLogin) {
 
-      return   ResponseEntity.ok(bookService.delete(uuid));
+      return   ResponseEntity.ok(bookService.delete(uuid, userLogin));
     }
 
     @PutMapping("updateByUUID/{uuid}")
@@ -68,5 +70,12 @@ public class BookController {
 
         log.warn(exception.getLocalizedMessage());
         return  new ResponseEntity(exception.getMessage(), HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(value = NoUserFoundException.class)
+    public ResponseEntity handleNoUserFoundException(NoUserFoundException exception) {
+
+        log.warn(exception.getLocalizedMessage());
+        return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
     }
 }
