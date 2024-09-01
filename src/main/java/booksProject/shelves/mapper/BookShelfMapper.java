@@ -2,8 +2,8 @@ package booksProject.shelves.mapper;
 
 import booksProject.books.mappers.BookMapper;
 import booksProject.shelves.entity.BookShelf;
-import booksProject.shelves.entity.BookShelfDto;
-import booksProject.shelves.entity.BookShelfForm;
+import booksProject.shelves.dto.BookShelfDto;
+import booksProject.shelves.dto.BookShelfForm;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;

@@ -6,8 +6,8 @@ import booksProject.books.repository.BooksRepository;
 import booksProject.shelves.BookShelfExistException;
 import booksProject.shelves.NoBookShelfExistException;
 import booksProject.shelves.entity.BookShelf;
-import booksProject.shelves.entity.BookShelfDto;
-import booksProject.shelves.entity.BookShelfForm;
+import booksProject.shelves.dto.BookShelfDto;
+import booksProject.shelves.dto.BookShelfForm;
 import booksProject.shelves.mapper.BookShelfMapper;
 import booksProject.shelves.repository.BookShelfRepository;
 import booksProject.user.NoUserFoundException;
@@ -47,12 +47,12 @@ public class BookShelfServiceImpl implements BookShelfService {
         if(user == null) {
             throw new NoUserFoundException(login);
         }
-        BookShelf bookShelf = new BookShelf();
+        BookShelf bookShelf;
         if(user.getShelves() == null){
             bookShelf = BookShelfMapper.mapBookShelfFormToBookShelf(bookShelfForm);
             user.getShelves().add(bookShelf);
         } else {
-            long result = user.getShelves().stream().filter(shelve -> shelve.equals(bookShelfForm.getName())).count();
+            long result = user.getShelves().stream().filter(shelve -> shelve.getName().equals(bookShelfForm.getName())).count();
             if(result != 0) {
                 throw new BookShelfExistException();
             }

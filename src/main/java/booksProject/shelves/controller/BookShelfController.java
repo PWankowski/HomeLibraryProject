@@ -4,7 +4,7 @@ package booksProject.shelves.controller;
 import booksProject.books.NoBookFoundException;
 import booksProject.shelves.BookShelfExistException;
 import booksProject.shelves.NoBookShelfExistException;
-import booksProject.shelves.entity.BookShelfForm;
+import booksProject.shelves.dto.BookShelfForm;
 import booksProject.shelves.service.BookShelfService;
 import booksProject.user.NoUserFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -34,22 +34,22 @@ public class BookShelfController {
         return ResponseEntity.ok(bookShelfService.createBookShelf(login, bookShelfForm));
     }
 
-    @PostMapping(value = "addBooksToBookShelf/{id}")
-    public ResponseEntity addBooksToBookShelf(@PathVariable Long id, @RequestBody List<String> items) {
+    @PostMapping(value = "addBooksToBookShelf/{idBookShelf}")
+    public ResponseEntity addBooksToBookShelf(@PathVariable Long idBookShelf, @RequestBody List<String> items) {
 
-        return ResponseEntity.ok(bookShelfService.addBooksToBookShelf(id, items));
+        return ResponseEntity.ok(bookShelfService.addBooksToBookShelf(idBookShelf, items));
     }
 
-    @PutMapping(value = "updateBookShelf/{id}")
-    public ResponseEntity updateBookShelf(@PathVariable Long id, @RequestParam String name) {
+    @PutMapping(value = "updateBookShelf/{idBookShelf}")
+    public ResponseEntity updateBookShelf(@PathVariable Long idBookShelf, @RequestParam String name) {
 
-        return ResponseEntity.ok(bookShelfService.updateBookShelf(id, name));
+        return ResponseEntity.ok(bookShelfService.updateBookShelf(idBookShelf, name));
     }
 
-    @GetMapping(value = "getBookShelf/{id}")
-    public ResponseEntity getBookShelf(@PathVariable Long id) {
+    @GetMapping(value = "getBookShelf/{idBookShelf}")
+    public ResponseEntity getBookShelf(@PathVariable Long idBookShelf) {
 
-        return ResponseEntity.ok(bookShelfService.getBookShelf(id));
+        return ResponseEntity.ok(bookShelfService.getBookShelf(idBookShelf));
     }
 
     @GetMapping(value = "getAllBookShelf/{login}")

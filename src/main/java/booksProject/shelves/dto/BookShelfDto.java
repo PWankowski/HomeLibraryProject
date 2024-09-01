@@ -1,4 +1,4 @@
-package booksProject.shelves.entity;
+package booksProject.shelves.dto;
 
 import booksProject.books.dto.BookDto;
 import lombok.*;

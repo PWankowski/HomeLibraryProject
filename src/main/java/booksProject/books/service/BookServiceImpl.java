@@ -39,7 +39,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<BookDto> findAll(String userLogin) throws NoUserFoundException {
+    public List<BookDto> findAll(String userLogin) throws NoUserFoundException, NoBookFoundException {
 
         UserEntity user = userRepository.findByLogin(userLogin).orElseThrow(() -> new NoUserFoundException(userLogin));
         List<BookEntity> books = bookRepository.findAllByUser(user).orElseThrow(() -> new NoBookFoundException(String.format("No Books for user: %s found!", user.getLogin())));
@@ -169,17 +169,20 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toSet());
     }
 
-    private boolean validateBook(BookForm form,UserEntity user) throws NoUserFoundException{
+    boolean validateBook(BookForm form,UserEntity user) throws NoUserFoundException {
 
       String author =  form.getAuthor();
       String title = form.getTitle().toLowerCase().replace(" ", "");
+      long result;
+
       if(user.getBooks().isEmpty()) {
           return false;
       }
-      List<BookEntity> booksByAuthor = user.getBooks().stream().filter(book -> book.getAuthor().equals(author)).collect(Collectors.toList());
-      long result;
+      List<BookEntity> booksByAuthor = user.getBooks().stream()
+                                                      .filter(book -> book.getAuthor().equals(author))
+                                                      .collect(Collectors.toList());
 
-      if(booksByAuthor.isEmpty()){
+      if(booksByAuthor.isEmpty()) {
           return false;
       } else {
           result = booksByAuthor.stream()
@@ -188,7 +191,7 @@ public class BookServiceImpl implements BookService {
                   .count();
       }
 
-      if(result != 0){
+      if(result != 0) {
           return true;
       }
       return false;
