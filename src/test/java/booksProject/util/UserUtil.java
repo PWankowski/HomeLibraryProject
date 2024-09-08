@@ -4,6 +4,7 @@ import booksProject.books.entity.BookEntity;
 import booksProject.shelves.entity.BookShelf;
 import booksProject.user.Role;
 import booksProject.user.entity.UserEntity;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class UserUtil {
 
     private static final Set<BookShelf> SHELVES = new HashSet<>();
 
-    private static final Set<BookEntity> BOOKS = new HashSet<>();
+    private static final Set<BookEntity> BOOKS = Set.of(BookUtil.getBook());
     public static UserEntity getUser() {
 
         return new UserEntity(ID, NAME, SURNAME, AGE, SEX, EMAILADDRESS,LOGIN, PASSWORD, ROLE, SHELVES, BOOKS);

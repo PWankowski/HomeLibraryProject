@@ -143,13 +143,12 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(BookExistException.class, () -> bookService.create(form, userLogin));
 
 		//Then
-		System.out.println(result);
 		Assertions.assertEquals(result.getClass(), BookExistException.class);
 		Assertions.assertEquals("Book with this Author and Title exist!", result.getMessage());
 	}
 
 	@Test
-	void shouldReturnNoUserFoundExceptionFromCreate()  {
+	void shouldReturnNoUserFoundExceptionFromCreate() {
 
 		//Given
 		BookForm form = BookFormUtil.getBookForm();
@@ -161,6 +160,46 @@ class BookServiceExceptionsTests {
 		Assertions.assertEquals(String.format("No User  %s found!", userLogin), result.getMessage());
 	}
 
+	@Test
+	void shouldReturnNoUserFoundExceptionFromDelete() {
+
+		//Given
+		String uuid = "1234-1234-1234";
+		//When
+		final var result = Assertions.assertThrows(NoUserFoundException.class, () -> bookService.delete(uuid, userLogin));
+
+		//Then
+		Assertions.assertEquals(result.getClass(), NoUserFoundException.class);
+		Assertions.assertEquals(String.format("No User  %s found!", userLogin), result.getMessage());
+	}
+
+	@Test
+	void shouldReturnNoBookFoundExceptionFromDelete() {
+
+		//Given
+		String uuid = "1234-1234-1234";
+		//When
+		Mockito.when(userRepository.findByLogin(userLogin)).thenReturn(Optional.of(user));
+		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.delete(uuid, userLogin));
+
+		//Then
+		Assertions.assertEquals(result.getClass(), NoBookFoundException.class);
+		Assertions.assertEquals(String.format("No Book with uuid: %s found!", uuid), result.getMessage());
+	}
+
+	@Test
+	void shouldReturnNoBookFoundExceptionFromUpdate() {
+
+		//Given
+		String uuid = "1234-1234-1234";
+		BookForm form = BookFormUtil.getBookForm();
+		//When
+		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.update(uuid, form));
+
+		//Then
+		Assertions.assertEquals(result.getClass(), NoBookFoundException.class);
+		Assertions.assertEquals(String.format("No Book with uuid: %s found!", uuid), result.getMessage());
+	}
 
 	private List<BookEntity> getBooksByUser(String login) {
 
