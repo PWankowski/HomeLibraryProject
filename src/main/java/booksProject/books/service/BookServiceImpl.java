@@ -56,7 +56,7 @@ public class BookServiceImpl implements BookService {
             List<BookEntity> books = bookRepository.findAllByUser(user).orElseThrow(() -> new NoBookFoundException(String.format("No Books for user: %s found!", user.getLogin())));
 
             List<BookEntity> result =  books.stream()
-                    .filter(book -> book.getAuthor().equals(author))
+                    .filter(book -> book.getAuthor().toLowerCase().trim().equals(author.toLowerCase().trim()))
                     .collect(Collectors.toList());
 
             if(!result.isEmpty()){

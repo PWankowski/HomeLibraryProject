@@ -25,7 +25,7 @@ public class UserUtil {
 
     private static final Set<BookShelf> SHELVES = new HashSet<>();
 
-    private static final Set<BookEntity> BOOKS = Set.of(BookUtil.getBook());
+    private static final Set<BookEntity> BOOKS = BookUtil.getBooks();
     public static UserEntity getUser() {
 
         return new UserEntity(ID, NAME, SURNAME, AGE, SEX, EMAILADDRESS,LOGIN, PASSWORD, ROLE, SHELVES, BOOKS);
