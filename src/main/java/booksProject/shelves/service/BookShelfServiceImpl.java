@@ -13,7 +13,8 @@ import booksProject.shelves.repository.BookShelfRepository;
 import booksProject.user.NoUserFoundException;
 import booksProject.user.entity.UserEntity;
 import booksProject.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,21 +24,14 @@ import java.util.Optional;
 
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class BookShelfServiceImpl implements BookShelfService {
 
     private final BookShelfRepository bookShelfRepository;
-
     private final BooksRepository booksRepository;
-
     private final UserRepository userRepository;
 
-
-    @Autowired
-    public BookShelfServiceImpl(BookShelfRepository bookShelfRepository, BooksRepository booksRepository, UserRepository userRepository) {
-        this.bookShelfRepository = bookShelfRepository;
-        this.booksRepository = booksRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     @Transactional

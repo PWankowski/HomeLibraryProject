@@ -50,7 +50,7 @@ class BookServiceExceptionsTests {
 		user = UserUtil.getUser();
 	}
 	@Test
-	void shouldReturnNoUserFoundExceptionFromFindAll() {
+	void shouldReturnNoUserFoundExceptionFromFindAllMethod() {
 
 		//Given
 
@@ -63,7 +63,7 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnNoBookFoundExceptionFromFindAll() {
+	void shouldReturnNoBookFoundExceptionFromFindAllMethod() {
 
 		//Given
 		Mockito.when(userRepository.findByLogin(userLogin)).thenReturn(Optional.of(user));
@@ -77,7 +77,7 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnNoUserFoundExceptionFromFindAllByAuthor() {
+	void shouldReturnNoUserFoundExceptionFromFindAllByAuthorMethod() {
 
 		//Given
 
@@ -90,7 +90,7 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnNoBookFoundExceptionFromFindAllByAuthor() {
+	void shouldReturnNoBookFoundExceptionFromFindAllByAuthorMethod() {
 
 		//Given
 		Mockito.when(userRepository.findByLogin(userLogin)).thenReturn(Optional.of(user));
@@ -104,7 +104,7 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnNoBookFoundExceptionForAuthorFromFindAllByAuthor() {
+	void shouldReturnNoBookFoundExceptionForAuthorFromFindAllByAuthorMethod() {
 
 		//Given
 		Mockito.when(userRepository.findByLogin(userLogin)).thenReturn(Optional.of(user));
@@ -120,10 +120,11 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnNoBookFoundExceptionFromFindByUuid() {
+	void shouldReturnNoBookFoundExceptionFromFindByUuidMethod() {
 
 		//Given
 		String uuid = "1234-1234-1234";
+
 		//When
 		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.findByUuid(uuid));
 
@@ -133,12 +134,13 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnBookExistExceptionFromCreate() {
+	void shouldReturnBookExistExceptionFromCreateMethod() {
 
 		//Given
 		BookForm form = BookFormUtil.getBookForm();
 		Mockito.when(userRepository.findByLogin(userLogin)).thenReturn(Optional.of(user));
 		Mockito.doReturn(true).when(bookService).validateBook(form, user);
+
 		//When
 		final var result = Assertions.assertThrows(BookExistException.class, () -> bookService.create(form, userLogin));
 
@@ -148,10 +150,11 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnNoUserFoundExceptionFromCreate() {
+	void shouldReturnNoUserFoundExceptionFromCreateMethod() {
 
 		//Given
 		BookForm form = BookFormUtil.getBookForm();
+
 		//When
 		final var result = Assertions.assertThrows(NoUserFoundException.class, () -> bookService.create(form, userLogin));
 
@@ -161,10 +164,11 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnNoUserFoundExceptionFromDelete() {
+	void shouldReturnNoUserFoundExceptionFromDeleteMethod() {
 
 		//Given
 		String uuid = "1234-1234-1234";
+
 		//When
 		final var result = Assertions.assertThrows(NoUserFoundException.class, () -> bookService.delete(uuid, userLogin));
 
@@ -174,12 +178,13 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnNoBookFoundExceptionFromDelete() {
+	void shouldReturnNoBookFoundExceptionFromDeleteMethod() {
 
 		//Given
 		String uuid = "1234-1234-1234";
-		//When
 		Mockito.when(userRepository.findByLogin(userLogin)).thenReturn(Optional.of(user));
+
+		//When
 		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.delete(uuid, userLogin));
 
 		//Then
@@ -188,11 +193,12 @@ class BookServiceExceptionsTests {
 	}
 
 	@Test
-	void shouldReturnNoBookFoundExceptionFromUpdate() {
+	void shouldReturnNoBookFoundExceptionFromUpdateMethod() {
 
 		//Given
 		String uuid = "1234-1234-1234";
 		BookForm form = BookFormUtil.getBookForm();
+
 		//When
 		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.update(uuid, form));
 

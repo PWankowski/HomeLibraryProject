@@ -10,7 +10,8 @@ import booksProject.user.dto.UserForm;
 import booksProject.user.entity.UserEntity;
 import booksProject.user.mappers.UserMapper;
 import booksProject.user.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,20 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final JwtService jwtService;
-
     private final AuthenticationManager authenticationManager;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, JwtService jwtService, AuthenticationManager authenticationManager) {
-        this.userRepository = userRepository;
-        this.jwtService = jwtService;
-        this.authenticationManager = authenticationManager;
-    }
 
     @Transactional(readOnly = true)
     @Override
