@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-
     private final BooksRepository bookRepository;
     private final BookTagRepository bookTagRepository;
     private final UserRepository userRepository;
@@ -56,15 +55,15 @@ public class BookServiceImpl implements BookService {
             List<BookEntity> books = bookRepository.findAllByUser(user).orElseThrow(() -> new NoBookFoundException(String.format("No Books for user: %s found!", user.getLogin())));
 
             List<BookEntity> result =  books.stream()
-                    .filter(book -> book.getAuthor().equals(author))
-                    .collect(Collectors.toList());
+                                            .filter(book -> book.getAuthor().toLowerCase().trim().equals(author.toLowerCase().trim()))
+                                            .collect(Collectors.toList());
 
             if(!result.isEmpty()){
                return result.stream()
-                       .map(bookEntity -> BookMapper.map(bookEntity))
-                       .collect(Collectors.toList());
+                            .map(bookEntity -> BookMapper.map(bookEntity))
+                            .collect(Collectors.toList());
             }
-             throw new NoBookFoundException(String.format("No Books for author: %s found!", author));
+            throw new NoBookFoundException(String.format("No Books for author: %s found!", author));
         }
         return new ArrayList<>();
     }
@@ -108,13 +107,17 @@ public class BookServiceImpl implements BookService {
         if(!book.getUser().equals(user)) {
             return false;
         }
-        List<BookTagEntity> tags =  book.getTags().stream().toList();
-        for(int i=0; i<tags.size(); i++) {
-             book.removeBookTag(tags.get(i));
+        if(book.getTags() != null && book.getTags().size() > 0) {
+            List<BookTagEntity> tags =  book.getTags().stream().toList();
+            for(int i=0; i<tags.size(); i++) {
+                book.removeBookTag(tags.get(i));
+            }
         }
-        List<BookShelf> bookShelves = book.getBookShelves().stream().toList();
-        for(int i=0; i<bookShelves.size(); i++) {
-            book.removeBookShelf(bookShelves.get(i));
+        if(book.getBookShelves() != null && book.getBookShelves().size() > 0) {
+            List<BookShelf> bookShelves = book.getBookShelves().stream().toList();
+            for(int i=0; i<bookShelves.size(); i++) {
+                book.removeBookShelf(bookShelves.get(i));
+            }
         }
         book.removeRelatedUserFromBook(user);
         bookRepository.delete(book);
@@ -138,16 +141,16 @@ public class BookServiceImpl implements BookService {
     private void updateTags(Set<String> tagsForm, BookEntity book) {
 
         List<BookTagEntity> bookTagsFiltered = book.getTags().stream()
-                .filter(tag -> !tagsForm.contains(tag.getTagValue()))
-                .collect(Collectors.toList());
+                                                             .filter(tag -> !tagsForm.contains(tag.getTagValue()))
+                                                             .collect(Collectors.toList());
 
         for(int i=0; i<bookTagsFiltered.size(); i++) {
             book.removeBookTag(bookTagsFiltered.get(i));
         }
 
         Set<String> formTagsFiltered = tagsForm.stream()
-                .filter(tagForm -> !book.getTags().contains(tagForm))
-                .collect(Collectors.toSet());
+                                                .filter(tagForm -> !book.getTags().contains(tagForm))
+                                                .collect(Collectors.toSet());
         Set<BookTagEntity> bookTags = mapStringToTagEntity(formTagsFiltered);
         for(BookTagEntity tag : bookTags) {
             book.addBookTag(tag);
@@ -169,7 +172,7 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.toSet());
     }
 
-    boolean validateBook(BookForm form,UserEntity user) throws NoUserFoundException {
+    boolean validateBook(BookForm form, UserEntity user) throws NoUserFoundException {
 
       String author =  form.getAuthor();
       String title = form.getTitle().toLowerCase().replace(" ", "");
@@ -186,9 +189,9 @@ public class BookServiceImpl implements BookService {
           return false;
       } else {
           result = booksByAuthor.stream()
-                  .map(book -> book.getTitle().toLowerCase().replace(" ", ""))
-                  .filter(bookTitle -> bookTitle.equals(title))
-                  .count();
+                                .map(book -> book.getTitle().toLowerCase().replace(" ", ""))
+                                .filter(bookTitle -> bookTitle.equals(title))
+                                .count();
       }
 
       if(result != 0) {

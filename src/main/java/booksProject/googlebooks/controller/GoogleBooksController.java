@@ -20,11 +20,11 @@ public class GoogleBooksController {
         this.googleBooksService = googleBooksService;
     }
 
-    @GetMapping("/book/{id}")
-    public ResponseEntity getBook(@PathVariable String id) {
+    @GetMapping("/book/{idBook}")
+    public ResponseEntity getBook(@PathVariable String idBook) {
 
         try {
-            return ResponseEntity.ok(googleBooksService.getBook(id));
+            return ResponseEntity.ok(googleBooksService.getBook(idBook));
         } catch (IOException e){
             log.error(e.getLocalizedMessage());
             return ResponseEntity.internalServerError().body(e.getLocalizedMessage());
