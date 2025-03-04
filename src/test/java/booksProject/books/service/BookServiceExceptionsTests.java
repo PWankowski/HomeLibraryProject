@@ -58,7 +58,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(NoUserFoundException.class, () -> bookService.findAll(userLogin));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), NoUserFoundException.class);
+		Assertions.assertEquals(NoUserFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No User  %s found!", userLogin), result.getMessage());
 	}
 
@@ -72,7 +72,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.findAll(userLogin));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), NoBookFoundException.class);
+		Assertions.assertEquals(NoBookFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No Books for user: %s found!", userLogin), result.getMessage());
 	}
 
@@ -85,7 +85,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(NoUserFoundException.class, () -> bookService.findAllByAuthor(author, userLogin));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), NoUserFoundException.class);
+		Assertions.assertEquals(NoUserFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No User  %s found!", userLogin), result.getMessage());
 	}
 
@@ -99,7 +99,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.findAllByAuthor(author, userLogin));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), NoBookFoundException.class);
+		Assertions.assertEquals(NoBookFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No Books for user: %s found!", userLogin), result.getMessage());
 	}
 
@@ -115,7 +115,7 @@ class BookServiceExceptionsTests {
 
 		//Then
 		System.out.println(result.getMessage());
-		Assertions.assertEquals(result.getClass(), NoBookFoundException.class);
+		Assertions.assertEquals(NoBookFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No Books for author: %s found!", author), result.getMessage());
 	}
 
@@ -129,7 +129,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.findByUuid(uuid));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), NoBookFoundException.class);
+		Assertions.assertEquals(NoBookFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No Book with uuid: %s found!", uuid), result.getMessage());
 	}
 
@@ -145,7 +145,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(BookExistException.class, () -> bookService.create(form, userLogin));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), BookExistException.class);
+		Assertions.assertEquals(BookExistException.class, result.getClass());
 		Assertions.assertEquals("Book with this Author and Title exist!", result.getMessage());
 	}
 
@@ -159,7 +159,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(NoUserFoundException.class, () -> bookService.create(form, userLogin));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), NoUserFoundException.class);
+		Assertions.assertEquals(NoUserFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No User  %s found!", userLogin), result.getMessage());
 	}
 
@@ -173,7 +173,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(NoUserFoundException.class, () -> bookService.delete(uuid, userLogin));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), NoUserFoundException.class);
+		Assertions.assertEquals(NoUserFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No User  %s found!", userLogin), result.getMessage());
 	}
 
@@ -188,7 +188,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.delete(uuid, userLogin));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), NoBookFoundException.class);
+		Assertions.assertEquals(NoBookFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No Book with uuid: %s found!", uuid), result.getMessage());
 	}
 
@@ -203,7 +203,7 @@ class BookServiceExceptionsTests {
 		final var result = Assertions.assertThrows(NoBookFoundException.class, () -> bookService.update(uuid, form));
 
 		//Then
-		Assertions.assertEquals(result.getClass(), NoBookFoundException.class);
+		Assertions.assertEquals(NoBookFoundException.class, result.getClass());
 		Assertions.assertEquals(String.format("No Book with uuid: %s found!", uuid), result.getMessage());
 	}
 
