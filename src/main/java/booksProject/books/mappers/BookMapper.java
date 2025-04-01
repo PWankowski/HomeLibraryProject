@@ -8,16 +8,15 @@ import java.util.UUID;
 
 public class BookMapper {
 
-    private static BookTagMapper bookTagMapper = new BookTagMapper();
-    private static BookDetailsMapper bookDetailsMapper = new BookDetailsMapper();
+
     public static BookDto map(BookEntity entity) {
 
         BookDto bookDto = new BookDto();
         bookDto.setUuid(entity.getUuid());
         bookDto.setAuthor(entity.getAuthor());
         bookDto.setTitle(entity.getTitle());
-        bookDto.setDetails(bookDetailsMapper.map(entity.getDetails()));
-        bookDto.setTags(bookTagMapper.mapToString(entity.getTags()));
+        bookDto.setDetails(BookDetailsMapper.map(entity.getDetails()));
+        bookDto.setTags(BookTagMapper.mapToString(entity.getTags()));
 
         return bookDto;
     }
@@ -28,7 +27,7 @@ public class BookMapper {
         bookEntity.setUuid(UUID.randomUUID().toString());
         bookEntity.setAuthor(formEntity.getAuthor());
         bookEntity.setTitle(formEntity.getTitle());
-        bookEntity.setDetails(bookDetailsMapper.map(formEntity.getDetails()));
+        bookEntity.setDetails(BookDetailsMapper.map(formEntity.getDetails()));
 
         return bookEntity;
     }

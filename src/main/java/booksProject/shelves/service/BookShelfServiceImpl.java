@@ -32,7 +32,6 @@ public class BookShelfServiceImpl implements BookShelfService {
     private final BooksRepository booksRepository;
     private final UserRepository userRepository;
 
-
     @Override
     @Transactional
     public BookShelfDto createBookShelf(String login, BookShelfForm bookShelfForm) throws BookShelfExistException, NoUserFoundException {
@@ -66,8 +65,8 @@ public class BookShelfServiceImpl implements BookShelfService {
         bookShelf.removeUser(user);
 
         List<BookEntity> items = bookShelf.getItems().stream().toList();
-        for(int i=0; i<items.size(); i++) {
-            bookShelf.removeItem(items.get(i));
+        for (BookEntity item : items) {
+            bookShelf.removeItem(item);
         }
         bookShelfRepository.delete(bookShelf);
     }
@@ -88,6 +87,7 @@ public class BookShelfServiceImpl implements BookShelfService {
 
     @Override
     public BookShelfDto getBookShelf(Long id) throws NoBookShelfExistException {
+
         BookShelf bookShelf = validateBookShelfExistAndReturnValueOrThrowException(id);
         return BookShelfMapper.mapBookShelfToBookShelfDto(bookShelf);
     }
@@ -138,7 +138,7 @@ public class BookShelfServiceImpl implements BookShelfService {
     private BookShelf validateBookShelfExistAndReturnValueOrThrowException(Long idBookShelf) throws NoBookShelfExistException {
 
         Optional<BookShelf> bookShelfOpt = bookShelfRepository.findById(idBookShelf);
-        if(!bookShelfOpt.isPresent()){
+        if(bookShelfOpt.isEmpty()) {
             throw new NoBookShelfExistException();
         }
         return bookShelfOpt.get();

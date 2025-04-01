@@ -16,5 +16,4 @@ public class BookShelfForm {
 
     private String name;
     private List<BookForm> items;
-
 }

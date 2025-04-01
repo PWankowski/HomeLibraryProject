@@ -12,7 +12,5 @@ import java.util.Optional;
 public interface BooksRepository extends JpaRepository<BookEntity,Long> {
 
      Optional<BookEntity> findByUuid(String uuid);
-
      Optional<List<BookEntity>> findAllByUser(UserEntity user);
-
 }

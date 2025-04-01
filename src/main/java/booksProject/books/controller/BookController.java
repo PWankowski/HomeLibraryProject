@@ -2,6 +2,7 @@ package booksProject.books.controller;
 
 import booksProject.books.BookExistException;
 import booksProject.books.NoBookFoundException;
+import booksProject.books.dto.BookDto;
 import booksProject.books.dto.BookForm;
 import booksProject.books.service.BookService;
 import booksProject.user.NoUserFoundException;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -24,58 +27,64 @@ public class BookController {
     }
 
     @GetMapping("getAllByAuthor")
-    public ResponseEntity getAllBooksByAuthor(@RequestParam String author, @RequestParam String userLogin) {
+    public ResponseEntity getAllBooksByAuthor(@RequestParam String author, @RequestHeader("User-Login") String userLogin) {
 
-       return ResponseEntity.ok(bookService.findAllByAuthor(author, userLogin));
+        List<BookDto> resultList = bookService.findAllByAuthor(author, userLogin);
+        return ResponseEntity.ok(resultList);
     }
-    @GetMapping("getAll/{userLogin}")
-    public ResponseEntity getAll(@PathVariable String userLogin) {
+    @GetMapping("getAll")
+    public ResponseEntity getAll(@RequestHeader("User-Login") String userLogin) {
 
-       return ResponseEntity.ok(bookService.findAll(userLogin));
+        List<BookDto> resultList = bookService.findAll(userLogin);
+        return ResponseEntity.ok(resultList);
     }
 
     @GetMapping("getByUUID/{uuid}")
     public ResponseEntity getBookByUUID(@PathVariable String uuid) {
 
-       return ResponseEntity.ok(bookService.findByUuid(uuid));
+        BookDto book = bookService.findByUuid(uuid);
+        return ResponseEntity.ok(book);
     }
 
     @PostMapping("createBook")
-    public ResponseEntity createBook(@RequestBody BookForm formBook, @RequestParam String userLogin) {
+    public ResponseEntity createBook(@RequestBody BookForm formBook, @RequestHeader("User-Login") String userLogin) {
 
-      return  ResponseEntity.ok(bookService.create(formBook, userLogin));
+        BookDto book = bookService.create(formBook, userLogin);
+        return ResponseEntity.ok(book);
     }
 
     @DeleteMapping("deleteByUUID")
-    public ResponseEntity deleteBook(@RequestParam String uuid, @RequestParam String userLogin) {
+    public ResponseEntity deleteBook(@RequestParam String uuid, @RequestHeader("User-Login") String userLogin) {
 
-      return   ResponseEntity.ok(bookService.delete(uuid, userLogin));
+        bookService.delete(uuid, userLogin);
+        return ResponseEntity.ok("Poprawnie usnięto obiekt");
     }
 
     @PutMapping("updateByUUID/{uuid}")
     public ResponseEntity updateBook(@PathVariable String uuid, @RequestBody BookForm form) {
 
-       return  ResponseEntity.ok(bookService.update(uuid,form));
+        BookDto book = bookService.update(uuid,form);
+        return ResponseEntity.ok(book);
     }
 
     @ExceptionHandler(value = NoBookFoundException.class)
     public ResponseEntity handleNoBookFoundException(NoBookFoundException exception) {
 
-        log.warn(exception.getLocalizedMessage());
-        return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        log.warn(exception.getLocalizedMessage(), exception);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = BookExistException.class)
     public ResponseEntity handleBookExistException(BookExistException exception) {
 
-        log.warn(exception.getLocalizedMessage());
-        return  new ResponseEntity(exception.getMessage(), HttpStatus.CONFLICT);
+        log.warn(exception.getLocalizedMessage(), exception);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = NoUserFoundException.class)
     public ResponseEntity handleNoUserFoundException(NoUserFoundException exception) {
 
-        log.warn(exception.getLocalizedMessage());
-        return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        log.warn(exception.getLocalizedMessage(), exception);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 }

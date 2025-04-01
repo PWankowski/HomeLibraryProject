@@ -18,14 +18,14 @@ public class EmailSenderController {
     private final EmailService emailService;
 
     @PostMapping("sendSimpleEmail")
-    public ResponseEntity sendSimpleEmail(@RequestParam String login){
+    public ResponseEntity sendSimpleEmail(@RequestHeader("User-Login") String login){
 
         emailService.sendSimpleMailMessage(login);
         return  ResponseEntity.ok("Email sent");
     }
 
     @PostMapping("sendHtmlEmail")
-    public ResponseEntity sendHtmlEmail(@RequestParam String login){
+    public ResponseEntity sendHtmlEmail(@RequestHeader("User-Login") String login){
 
         emailService.sendHtmlMailMessage(login);
         return  ResponseEntity.ok("Email sent");
@@ -35,12 +35,12 @@ public class EmailSenderController {
     public ResponseEntity handleNoUserFoundException(NoUserFoundException exception) {
 
         log.warn(exception.getLocalizedMessage());
-        return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
     @ExceptionHandler(value = EmailSendingException.class)
     public ResponseEntity handleEmailSendingException(EmailSendingException exception) {
 
         log.error(exception.getLocalizedMessage());
-        return  new ResponseEntity(exception.getMessage(), HttpStatus.CONFLICT);
+        return  ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
 }

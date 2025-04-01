@@ -46,6 +46,7 @@ public class BookServiceImpl implements BookService {
                     .map(bookEntity -> BookMapper.map(bookEntity))
                     .collect(Collectors.toList());
     }
+
     @Override
     @Transactional(readOnly = true)
     public List<BookDto> findAllByAuthor(String author, String userLogin) throws NoBookFoundException, NoUserFoundException {
@@ -67,6 +68,7 @@ public class BookServiceImpl implements BookService {
         }
         return new ArrayList<>();
     }
+
     @Override
     @Transactional(readOnly = true)
     @Cacheable(cacheNames = "findByUUID", key = "#uuid")
@@ -75,12 +77,13 @@ public class BookServiceImpl implements BookService {
         BookEntity book = bookRepository.findByUuid(uuid).orElseThrow(() -> new NoBookFoundException(String.format("No Book with uuid: %s found!", uuid)));
         return BookMapper.map(book);
     }
+
     @Override
     @Transactional
     public BookDto create(BookForm form, String userLogin) throws BookExistException, NoUserFoundException {
 
         UserEntity user = userRepository.findByLogin(userLogin).orElseThrow(() -> new NoUserFoundException(userLogin));
-        Boolean isBookPresent = validateBook(form, user);
+        boolean isBookPresent = validateBook(form, user);
         if(isBookPresent){
             throw new BookExistException("Book with this Author and Title exist!");
         }
@@ -88,7 +91,7 @@ public class BookServiceImpl implements BookService {
         Set<String> bookTagsString = form.getTags();
         book.addUser(user);
 
-        if(bookTagsString == null || bookTagsString.size() == 0) {
+        if(bookTagsString == null || bookTagsString.isEmpty()) {
            return BookMapper.map(bookRepository.save(book));
         }
         Set<BookTagEntity> bookTags = mapStringToTagEntity(bookTagsString);
@@ -97,6 +100,7 @@ public class BookServiceImpl implements BookService {
         }
         return BookMapper.map(bookRepository.save(book));
     }
+
     @Override
     @Transactional
     public boolean delete(String uuid, String userLogin) throws NoBookFoundException, NoUserFoundException {
@@ -107,16 +111,16 @@ public class BookServiceImpl implements BookService {
         if(!book.getUser().equals(user)) {
             return false;
         }
-        if(book.getTags() != null && book.getTags().size() > 0) {
+        if(book.getTags() != null && !book.getTags().isEmpty()) {
             List<BookTagEntity> tags =  book.getTags().stream().toList();
-            for(int i=0; i<tags.size(); i++) {
-                book.removeBookTag(tags.get(i));
+            for (BookTagEntity tag : tags) {
+                book.removeBookTag(tag);
             }
         }
-        if(book.getBookShelves() != null && book.getBookShelves().size() > 0) {
+        if(book.getBookShelves() != null && !book.getBookShelves().isEmpty()) {
             List<BookShelf> bookShelves = book.getBookShelves().stream().toList();
-            for(int i=0; i<bookShelves.size(); i++) {
-                book.removeBookShelf(bookShelves.get(i));
+            for (BookShelf bookShelf : bookShelves) {
+                book.removeBookShelf(bookShelf);
             }
         }
         book.removeRelatedUserFromBook(user);
@@ -144,8 +148,8 @@ public class BookServiceImpl implements BookService {
                                                              .filter(tag -> !tagsForm.contains(tag.getTagValue()))
                                                              .collect(Collectors.toList());
 
-        for(int i=0; i<bookTagsFiltered.size(); i++) {
-            book.removeBookTag(bookTagsFiltered.get(i));
+        for (BookTagEntity bookTagEntity : bookTagsFiltered) {
+            book.removeBookTag(bookTagEntity);
         }
 
         Set<String> formTagsFiltered = tagsForm.stream()
@@ -194,9 +198,6 @@ public class BookServiceImpl implements BookService {
                                 .count();
       }
 
-      if(result != 0) {
-          return true;
-      }
-      return false;
+        return result != 0;
     }
 }

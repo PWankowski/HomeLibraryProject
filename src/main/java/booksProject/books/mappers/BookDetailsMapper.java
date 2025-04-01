@@ -28,16 +28,13 @@ public class BookDetailsMapper {
             return detailsDto;
         }
         String isbn;
-        if(googleBook.getVolumeInfo().getIsbnList() == null){
+        if(googleBook.getVolumeInfo().getIsbnList() == null) {
             isbn = "";
-        } else{
-            isbn = googleBook.getVolumeInfo().getIsbnList()
-                    .stream()
-                    .findFirst()
-                    .map(object -> {
-                        return object.getType() + " " + object.getIdentifier();
-                    })
-                    .get();
+        } else {
+            isbn = googleBook.getVolumeInfo().getIsbnList().stream()
+                                                           .findFirst()
+                                                           .map(object -> {return object.getType() + " " + object.getIdentifier();})
+                                                           .get();
         }
         detailsDto.setIsbn(isbn);
         detailsDto.setPublisher(googleBook.getVolumeInfo().getPublisher());

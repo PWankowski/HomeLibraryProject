@@ -9,14 +9,14 @@ import java.util.stream.Collectors;
 
 public class BookTagMapper {
 
-    public Set<String> mapToString(Set<BookTagEntity> bookTags) {
+    public static Set<String> mapToString(Set<BookTagEntity> bookTags) {
 
-        if(bookTags == null || bookTags.size() == 0) {
+        if(bookTags == null || bookTags.isEmpty()) {
             return Set.of();
         }
 
         return  bookTags.stream()
-                .map(BookTagEntity::getTagValue)
-                .collect(Collectors.toSet());
+                        .map(BookTagEntity::getTagValue)
+                        .collect(Collectors.toSet());
     }
 }

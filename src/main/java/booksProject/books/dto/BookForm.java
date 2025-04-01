@@ -15,7 +15,6 @@ public class BookForm {
 
     private String title;
     private String author;
-
     private BookFormDetails details;
     private Set<String> tags;
 }

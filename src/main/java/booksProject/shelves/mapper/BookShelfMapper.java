@@ -18,6 +18,7 @@ public class BookShelfMapper {
     }
 
     public static BookShelfDto mapBookShelfToBookShelfDto(BookShelf shelf) {
+
         BookShelfDto bookShelfDto = new BookShelfDto();
         bookShelfDto.setId(shelf.getId());
         bookShelfDto.setName(shelf.getName());
@@ -29,7 +30,7 @@ public class BookShelfMapper {
                     .collect(Collectors.toList()));
         }
         bookShelfDto.setUserLogin(shelf.getUser().getLogin());
-       return bookShelfDto;
+        return bookShelfDto;
     }
 
 }

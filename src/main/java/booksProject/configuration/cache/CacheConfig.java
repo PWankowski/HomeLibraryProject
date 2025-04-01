@@ -42,18 +42,16 @@ public class CacheConfig {
 
     private CacheConfiguration implementsCacheConfigurationWithSerializer(Class keyClass, Class valueClass, long size, long timeToLive, Serializer serializer) {
 
-        return CacheConfigurationBuilder.newCacheConfigurationBuilder(
-                        keyClass, valueClass, newResourcePoolsBuilder().offheap(size, MemoryUnit.MB))
-                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(timeToLive)))
-                .withValueSerializer(serializer)
-                .build();
+        return CacheConfigurationBuilder.newCacheConfigurationBuilder(keyClass, valueClass, newResourcePoolsBuilder().offheap(size, MemoryUnit.MB))
+                                                                                                                     .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(timeToLive)))
+                                                                                                                     .withValueSerializer(serializer)
+                                                                                                                     .build();
     }
 
     private CacheConfiguration implementsCacheConfiguration(Class keyClass, Class valueClass, long size, long timeToLive) {
 
-        return CacheConfigurationBuilder.newCacheConfigurationBuilder(
-                        keyClass, valueClass, newResourcePoolsBuilder().offheap(size, MemoryUnit.MB))
-                .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(timeToLive)))
-                .build();
+        return CacheConfigurationBuilder.newCacheConfigurationBuilder(keyClass, valueClass, newResourcePoolsBuilder().offheap(size, MemoryUnit.MB))
+                                                                                                                     .withExpiry(ExpiryPolicyBuilder.timeToLiveExpiration(Duration.ofMinutes(timeToLive)))
+                                                                                                                     .build();
     }
 }
