@@ -40,6 +40,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthenticationResponse create(UserForm userForm) throws UserExistException {
+
         String email =  userForm.getEmailAddress();
         String login = userForm.getLogin();
         validateIfUserExist(email,login);
@@ -90,7 +91,8 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     @Override
-    public AuthenticationResponse authenticate(AuthenticationRequest request) throws NoUserFoundException{
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws NoUserFoundException {
+
          authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getLogin(),
@@ -105,11 +107,11 @@ public class UserServiceImpl implements UserService {
     private void validateIfUserExist(String email, String login) throws UserExistException {
 
         Optional<UserEntity> userByEmail = userRepository.findByEmailAddress(email);
-        if(!userByEmail.isEmpty()){
+        if(userByEmail.isPresent()){
             throw new UserExistException();
         }
         Optional<UserEntity> userByLogin = userRepository.findByLogin(login);
-        if(!userByLogin.isEmpty()){
+        if(userByLogin.isPresent()){
             throw new UserExistException();
         }
     }

@@ -25,7 +25,6 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @GetMapping("/{email}")
     public ResponseEntity getUser(@PathVariable String email) {
 
@@ -43,10 +42,11 @@ public class UserController {
 
         try{
             userService.delete(email);
-            return ResponseEntity.ok(String.format("User with email: %s deleted", email));
+            String message = String.format("User with email: %s deleted", email);
+            return ResponseEntity.ok(message);
         } catch (Exception e) {
             log.error(e.getLocalizedMessage());
-            return new ResponseEntity(String.format("User with email: %s wasn't deleted", email), HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(String.format("User with email: %s wasn't deleted", email));
         }
     }
 
@@ -54,20 +54,19 @@ public class UserController {
     public ResponseEntity handleNoUserFoundException(NoUserFoundException exception) {
 
         log.warn(exception.getLocalizedMessage());
-        return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
 
     @ExceptionHandler(value = UsernameNotFoundException.class)
     public ResponseEntity handleUsernameNotFoundException(UsernameNotFoundException exception) {
 
         log.warn(exception.getLocalizedMessage());
-        return  new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
     }
     @ExceptionHandler(value = UserExistException.class)
     public ResponseEntity handleUserExistException(UserExistException exception) {
 
         log.warn(exception.getLocalizedMessage());
-        return  new ResponseEntity(exception.getMessage(), HttpStatus.CONFLICT);
+        return  ResponseEntity.status(HttpStatus.CONFLICT).body(exception.getMessage());
     }
-
 }

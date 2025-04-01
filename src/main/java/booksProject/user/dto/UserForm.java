@@ -10,6 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 public class UserForm {
+
     private String name;
     private String surname;
     private int age;

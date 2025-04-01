@@ -24,21 +24,21 @@ public class UserMapper {
     public static UserDto mapToDto(UserEntity user) {
 
         return UserDto.builder()
-                .name(user.getName())
-                .surname(user.getSurname())
-                .age(user.getAge())
-                .emailAddress(user.getEmailAddress())
-                .sex(user.getSex())
-                .password(user.getPassword())
-                .login(user.getLogin())
-                .build();
+                      .name(user.getName())
+                      .surname(user.getSurname())
+                      .age(user.getAge())
+                      .emailAddress(user.getEmailAddress())
+                      .sex(user.getSex())
+                      .password(user.getPassword())
+                      .login(user.getLogin())
+                      .build();
     }
 
     public static List<UserDto> map(List<UserEntity> userList) {
 
        return userList.stream()
-                .map(user -> mapToDto(user))
-                .collect(Collectors.toList());
+                      .map(user -> mapToDto(user))
+                      .collect(Collectors.toList());
     }
 
     public static UserEntity mapToEntity(UserForm form) {
