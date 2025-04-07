@@ -1,6 +1,5 @@
 package booksProject.user.service;
 
-
 import booksProject.configuration.security.JwtService;
 import booksProject.user.*;
 import booksProject.user.auth.AuthenticationRequest;
@@ -18,7 +17,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 
 @Service
@@ -68,7 +66,7 @@ public class UserServiceImpl implements UserService {
         if(userForm.getSex() != null) {
             result.setSex(userForm.getSex());
         }
-        if(userForm.getSex() != null) {
+        if(userForm.getEmailAddress() != null && !userForm.getEmailAddress().isEmpty()) {
             result.setEmailAddress(userForm.getEmailAddress());
         }
         if(userForm.getLogin() != null) {
@@ -94,10 +92,7 @@ public class UserServiceImpl implements UserService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) throws NoUserFoundException {
 
          authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getLogin(),
-                        request.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(request.getLogin(), request.getPassword())
          );
         UserEntity user = userRepository.findByLogin(request.getLogin()).orElseThrow(() -> new NoUserFoundException(request.getLogin()));
         String jwtToken = jwtService.generateToken(user);

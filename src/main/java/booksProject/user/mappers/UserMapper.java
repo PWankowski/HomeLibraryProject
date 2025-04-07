@@ -45,14 +45,14 @@ public class UserMapper {
 
         String password = form.getPassword();
         return  UserEntity.builder()
-                    .name(form.getName())
-                    .surname(form.getSurname())
-                    .age(form.getAge())
-                    .emailAddress(form.getEmailAddress())
-                    .sex(form.getSex())
-                    .password(passwordEncoder.encode(password))
-                    .login(form.getLogin())
-                    .role(Role.USER)
-                    .build();
+                          .name(form.getName())
+                          .surname(form.getSurname())
+                          .age(form.getAge())
+                          .emailAddress(form.getEmailAddress())
+                          .sex(form.getSex())
+                          .password(passwordEncoder.encode(password))
+                          .login(form.getLogin())
+                          .role(Role.USER)
+                          .build();
     }
 }

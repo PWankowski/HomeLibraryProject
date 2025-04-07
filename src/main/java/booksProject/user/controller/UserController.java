@@ -25,20 +25,22 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity getUser(@PathVariable String email) {
+    @GetMapping("/getUser")
+    public ResponseEntity getUser(@RequestHeader("User-Email") String email) {
 
-         return ResponseEntity.ok(userService.getUser(email));
+         UserDto userDto = userService.getUser(email);
+         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/update/{email}")
-    public ResponseEntity updateUser(@RequestBody UserForm userForm, @PathVariable String email) {
+    @PutMapping("/updateUser")
+    public ResponseEntity updateUser(@RequestBody UserForm userForm, @RequestHeader(value = "User-Email") String email) {
 
-        return ResponseEntity.ok(userService.update(email, userForm));
+        UserDto userDto = userService.update(email, userForm);
+        return ResponseEntity.ok(userDto);
     }
 
-    @DeleteMapping("/delete/{email}")
-    public ResponseEntity deleteUser(@PathVariable String email) {
+    @DeleteMapping("/deleteUser")
+    public ResponseEntity deleteUser(@RequestHeader("User-Email") String email) {
 
         try{
             userService.delete(email);
@@ -46,7 +48,8 @@ public class UserController {
             return ResponseEntity.ok(message);
         } catch (Exception e) {
             log.error(e.getLocalizedMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(String.format("User with email: %s wasn't deleted", email));
+            String msg = String.format("User with email: %s wasn't deleted", email);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(msg);
         }
     }
 
